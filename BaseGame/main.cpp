@@ -2,11 +2,9 @@
 
 int main()
 {
-	GameManager game;
+	GameManager::GetInstance().Init();
 
-	game.Init();
+	GameManager::GetInstance().Run();
 
-	game.Run();
-
-	game.Release();
+	GameManager::GetInstance().Release();
 }

@@ -20,7 +20,7 @@ void MessageUI::Render()
     Gotoxy(start_x, start_y);
     std::cout << "------------------------------------------------------------";
 
-    for (size_t i = 0; i < messages.size(); ++i) {
+    for (int i = 0; i < messages.size(); ++i) {
         Gotoxy(start_x + 2, start_y + 1 + i);
         std::cout << "[알림] " << messages[i] << "                              ";
     }
@@ -33,7 +33,7 @@ void LogUI::Render()
     Gotoxy(start_x, start_y);
     std::cout << "[ 전투 / 행동 로그 ]";
 
-    for (size_t i = 0; i < messages.size(); ++i) {
+    for (int i = 0; i < messages.size(); ++i) {
         Gotoxy(start_x, start_y + 1 + i);
 
         // 공백을 넉넉히 줘서 이전 로그를 덮어씌움
@@ -57,7 +57,6 @@ void MinimapUI::Render()
 
 void CharacterUI::Render()
 {
-    // 5. 캐릭터 UI 영역 (화면 우상단 덮어쓰기)
     Gotoxy(start_x, start_y); 
     std::cout << "+------------+";
 

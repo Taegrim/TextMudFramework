@@ -4,16 +4,15 @@
 class BaseScene
 {
 public:
-	BaseScene();
+	BaseScene(){}
 	virtual ~BaseScene() {}
 
 	virtual void Init() = 0;
-	virtual void Update() = 0;
+	virtual void ProcessEvent(const Event& e) = 0;
+	virtual void Update(float delta_time) = 0;
 	virtual void Render() = 0;
 	virtual void Release() = 0;
-	virtual void ChangeScene() = 0;
 
-protected:
-	UIManager ui_manager;
+	virtual void ChangeScene(SceneType scene);
 };
 

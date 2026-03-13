@@ -4,16 +4,14 @@
 class TitleScene : public BaseScene
 {
 public:
-	TitleScene();
-	virtual ~TitleScene();
-
+	TitleScene() {}
+	virtual ~TitleScene() {};
 
 	// BaseScene을(를) 통해 상속됨
 	void Init() override;
-	void Update() override;
+	void ProcessEvent(const Event& e) override;
+	void Update(float delta_time) override;
 	void Render() override;
 	void Release() override;
-	void ChangeScene() override;
-
 };
 

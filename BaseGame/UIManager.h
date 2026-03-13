@@ -2,16 +2,29 @@
 #include "common.h"
 #include "GameUI.h"
 
-class UIManager {
+class UIManager 
+{
 public:
-    UIManager();
-    ~UIManager();
+    // 이 함수로 UIManager에 접근
+    static UIManager& GetInstance() {
+        static UIManager instance;
+        return instance;
+    }
 
-    void AddMessage(UIType type, const std::string& msg);
+    // 복사 생성자와 대입 연산자 삭제
+    // 실수로 객체가 복사되는 것 차단
+    UIManager(const UIManager&) = delete;
+    UIManager& operator=(const UIManager&) = delete;
 
+    void AddMessage(UIType type, std::string_view msg);
     void Render();
 
 private:
-    std::vector<BaseUI*> ui_list;
+    std::vector<std::unique_ptr<BaseUI>> ui_list;
+
+
+    // 외부에서 new 못하도록 차단
+    UIManager();
+    ~UIManager();
 };
 
