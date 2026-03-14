@@ -11,6 +11,14 @@ void TitleScene::Init()
 void TitleScene::ProcessEvent(const Event& e)
 {
     if (e.type == EventType::KeyDown) {
+
+        // 메세지 창 전부 비우기
+        UIManager::GetInstance().ClearMessage(UIType::Message);
+
+        // 고정 문구 적기
+        UIManager::GetInstance().AddMessage(UIType::Message, "1. 게임 시작   2. 게임 종료");
+        UIManager::GetInstance().AddMessage(UIType::Message, "원하는 메뉴의 번호를 입력하세요: ");
+
         switch (e.key_code) {
         case '1':
             UIManager::GetInstance().AddMessage(UIType::Message, "게임을 시작합니다!");

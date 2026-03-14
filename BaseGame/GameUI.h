@@ -1,6 +1,6 @@
 #pragma once
 #include "BaseUI.h"
-
+#include "UIManager.h"
 
 class ScreenUI : public BaseUI
 {

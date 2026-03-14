@@ -8,6 +8,7 @@ public:
 	virtual ~BaseUI() {}
 
 	virtual void AddMessage(std::string_view msg);
+	virtual void Clear();
 	void SetValid(bool valid);
 	bool IsValid() const;
 
@@ -19,10 +20,5 @@ protected:
 	int max_lines;
 	bool is_valid;
 	std::vector<std::string> messages;
-
-	void Gotoxy(int x, int y) {
-		COORD pos = { (short)x, (short)y };
-		SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
-	}
 };
 

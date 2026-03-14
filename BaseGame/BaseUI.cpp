@@ -12,6 +12,11 @@ void BaseUI::AddMessage(std::string_view msg)
     }
 }
 
+void BaseUI::Clear()
+{
+    messages.clear();
+}
+
 void BaseUI::SetValid(bool valid)
 {
     is_valid = valid;
