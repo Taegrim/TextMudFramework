@@ -1,6 +1,7 @@
 #pragma once
 #include "common.h"
 #include "GameUI.h"
+#include <windows.h>
 
 class UIManager 
 {
@@ -18,8 +19,11 @@ public:
 
     void AddMessage(UIType type, std::string_view msg);
     void ClearMessage(UIType type);
+    void ClearAll(const std::vector<UIType>& ignore_list = {});
     void Render();
     void PrintText(int x, int y, std::string_view sv);
+    void SetVisible(UIType type, bool value);
+    void SetAllVisible(bool value = true);
 
 private:
     std::vector<std::unique_ptr<BaseUI>> ui_list;

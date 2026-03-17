@@ -3,7 +3,7 @@
 
 void BaseScene::ChangeScene(SceneType scene)
 {
-	Event ev;
+	Event ev{};
 	ev.type = EventType::ChangeScene;
 	ev.next_scene = scene;
 	

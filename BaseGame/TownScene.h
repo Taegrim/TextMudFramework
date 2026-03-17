@@ -1,10 +1,10 @@
 #pragma once
 #include "BaseScene.h"
 
-class TitleScene : public BaseScene
+class TownScene : public BaseScene
 {
 public:
-	TitleScene() = default;
+	TownScene() = default;
 
 	// BaseScene을(를) 통해 상속됨
 	void Init() override;

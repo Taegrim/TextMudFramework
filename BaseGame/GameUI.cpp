@@ -1,15 +1,20 @@
 #include "GameUI.h"
+#include "UIManager.h"
 
 void ScreenUI::Render()
 {
+    // 상단 테두리
     UIManager::GetInstance().PrintText(start_x, start_y,
         "========================================");
-
-
     UIManager::GetInstance().PrintText(start_x, start_y + 1,
         "           [ 메인 뷰포트 ]              ");
 
+    // 내용
+    for (int i = 0; i < messages.size(); ++i) {
+        UIManager::GetInstance().PrintText(start_x + 2, start_y + 7 + i, messages[i]);
+    }
 
+    // 하단 테두리
     UIManager::GetInstance().PrintText(start_x, start_y + max_lines,
         "========================================");
 }
@@ -21,7 +26,7 @@ void MessageUI::Render()
 
     for (int i = 0; i < messages.size(); ++i) {
         UIManager::GetInstance().PrintText(start_x + 2, start_y + 1 + i, 
-            { "[알림] " + messages[i] });
+            "[알림] " + messages[i]);
     }
 }
 
@@ -37,19 +42,27 @@ void LogUI::Render()
 
 void MinimapUI::Render()
 {
+    // 상단 테두리
     UIManager::GetInstance().PrintText(start_x, start_y, "+--------+");
-
     UIManager::GetInstance().PrintText(start_x, start_y + 1, "| MINIMAP|");
-    UIManager::GetInstance().PrintText(start_x, start_y + 2, "|   @    |");
+    
+    for (int i = 0; i < messages.size(); ++i) {
+        UIManager::GetInstance().PrintText(start_x + 2, start_y + 2 + i, messages[i]);
+    }
 
-    UIManager::GetInstance().PrintText(start_x, start_y + 3, "+--------+");
+    // 하단 테두리
+    UIManager::GetInstance().PrintText(start_x, start_y + max_lines, "+--------+");
 }
 
 void CharacterUI::Render()
 {
+    // 상단 테두리
     UIManager::GetInstance().PrintText(start_x, start_y, "+------------+");
-    UIManager::GetInstance().PrintText(start_x, start_y + 1, "| LV: 5      |");
-    UIManager::GetInstance().PrintText(start_x, start_y + 2, "| HP: 100/100|");
-    UIManager::GetInstance().PrintText(start_x, start_y + 3, "| MP: 50/50  |");
-    UIManager::GetInstance().PrintText(start_x, start_y + 4, "+------------+");
+
+    for (int i = 0; i < messages.size(); ++i) {
+        UIManager::GetInstance().PrintText(start_x + 2, start_y + 1 + i, messages[i]);
+    }
+
+    // 하단 테두리
+    UIManager::GetInstance().PrintText(start_x, start_y + max_lines, "+------------+");
 }

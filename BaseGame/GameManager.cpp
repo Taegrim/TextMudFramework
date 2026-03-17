@@ -1,7 +1,11 @@
 #include "GameManager.h"
 #include "TitleScene.h"
+#include "TownScene.h"
+#include "Player.h"
+#include "UIManager.h"
 
-GameManager::GameManager() : scene_stack(), next_scene(SceneType::None), is_running(true)
+GameManager::GameManager() : scene_stack(), scene_op(SceneOp::None),
+	next_scene(SceneType::None), is_running(true)
 {
 }
 
@@ -11,11 +15,17 @@ GameManager::~GameManager()
 
 void GameManager::Init()
 {
+	UIManager::GetInstance().SetAllVisible(true);
+
+	// 플레이어 생성
+	player = std::make_unique<Player>("용사", "@", Status(100, 100, 10, 10, 50, 30));
+
+	// 초기 씬
 	scene_stack.push_back(CreateScene(SceneType::Title));
 	scene_stack.back()->Init();
 }
 
-// 고정 스텝 방식
+// 고정 스텝 방식 게임 루프
 void GameManager::Run()
 {
 	// 60fps -> 1프레임당 약16.66ms
@@ -65,6 +75,11 @@ void GameManager::Run()
 				is_running = false;
 				break;
 			}
+
+			// 씬 전환 예약되었으면 이후에 다른 event가 있어도 무시
+			if (scene_op != SceneOp::None) {
+				break;
+			}
 		}
 
 		// 16.66ms가 지났다면 update, render
@@ -79,7 +94,7 @@ void GameManager::Run()
 			}
 
 			// 씬 Change, Push, Pop 처리
-			if (next_scene != SceneType::None) {
+			if (scene_op != SceneOp::None) {
 				ProcessScene();
 			}
 
@@ -106,6 +121,11 @@ void GameManager::PushEvent(const Event& ev)
 	event_queue.push(ev);
 }
 
+Player* GameManager::GetPlayer() const
+{
+	return player.get();
+}
+
 
 
 // ------ private 함수 -----
@@ -114,7 +134,7 @@ void GameManager::ProcessInput()
 	if (_kbhit()) {
 		int key = _getch();
 
-		Event ev;
+		Event ev{};
 		ev.type = EventType::KeyDown;
 		ev.key_code = key;
 		event_queue.push(ev);
@@ -130,6 +150,12 @@ void GameManager::ProcessScene()
 		[[fallthrough]];
 
 	case SceneOp::Push:
+		// 씬 진입 직전 UI 내용 모두 날리기
+		UIManager::GetInstance().ClearAll();
+
+		// 씬의 진입 직전 모든 UI 키기
+		UIManager::GetInstance().SetAllVisible(true);
+
 		scene_stack.push_back(CreateScene(next_scene));
 		scene_stack.back()->Init();
 		break;
@@ -138,6 +164,11 @@ void GameManager::ProcessScene()
 		if (!scene_stack.empty()) {
 			scene_stack.back()->Release();
 			scene_stack.pop_back();
+
+			// Pop 시 마지막 씬이었다면 게임 종료
+			if (scene_stack.empty()) {
+				is_running = false;
+			}
 		}
 		break;
 
@@ -163,10 +194,10 @@ std::unique_ptr<BaseScene> GameManager::CreateScene(SceneType type)
 	switch (type) {
 	case SceneType::Title:
 		return std::make_unique<TitleScene>();
-		break;
+		
 	case SceneType::Town:
-		//return std::make_unique<TownScene>();
-		break;
+		return std::make_unique<TownScene>();
+		
 	case SceneType::Dungeon:
 		//return std::make_unique<DungeonScene>();
 		break;

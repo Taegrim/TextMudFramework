@@ -1,6 +1,8 @@
 #pragma once
-#include "BaseScene.h"
-#include "UIManager.h"
+#include "common.h"
+
+class BaseScene;
+class Player;
 
 class GameManager
 {
@@ -19,7 +21,10 @@ public:
     void Release();
     void PushEvent(const Event& ev);
 
+    Player* GetPlayer() const ;
+
 private:
+    std::unique_ptr<Player> player;
 	std::vector<std::unique_ptr<BaseScene>> scene_stack;
     SceneOp scene_op;
     SceneType next_scene;

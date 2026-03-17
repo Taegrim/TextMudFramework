@@ -15,7 +15,7 @@ UIManager::UIManager() : current_buffer_idx(0)
     SetConsoleCursorInfo(screen_buffers[0], &cci);
     SetConsoleCursorInfo(screen_buffers[1], &cci);
 
-
+    // UI : x, y, max_line
     // 0: Screen (x:2, y:2, 15줄)
     ui_list.push_back(std::make_unique<ScreenUI>(2, 2, 15));
 
@@ -56,19 +56,33 @@ void UIManager::ClearMessage(UIType type)
     }
 }
 
+void UIManager::ClearAll(const std::vector<UIType>& ignore_list)
+{
+    for (int i = 0; i < static_cast<int>(UIType::None); ++i) {
+        UIType current_type = static_cast<UIType>(i);
+
+        auto it = std::find(ignore_list.begin(), ignore_list.end(), current_type);
+        if (it != ignore_list.end()) {
+            continue;
+        }
+
+        ui_list[i]->Clear();
+    }
+}
+
 void UIManager::Render() 
 {
     // 그리기 전 Back Buffer 비우기 (이전 프레임 잔상 제거)
     ClearBackBuffer();
 
-    // Back Buffer 그리기
+    // 모든 UI Back Buffer에 그리기
     for (const auto& ui : ui_list) {
         if (ui->IsValid()) {
             ui->Render();
         }
     }
 
-    //  화면에 완성된 Back Buffer 띄우기
+    // 화면에 완성된 Back Buffer 띄우기
     SetConsoleActiveScreenBuffer(screen_buffers[current_buffer_idx]);
 
     // 그릴 버퍼 교체
@@ -87,6 +101,22 @@ void UIManager::PrintText(int x, int y, std::string_view sv)
     WriteConsoleA(screen_buffers[current_buffer_idx],
         sv.data(), (DWORD)sv.length(), &dwCharsWritten, NULL);
 }
+
+void UIManager::SetVisible(UIType type, bool value)
+{
+    int idx = static_cast<int>(type);
+    if (idx >= 0 && idx < static_cast<int>(UIType::None)) {
+        ui_list[idx]->SetValid(value);
+    }
+}
+
+void UIManager::SetAllVisible(bool value)
+{
+    for (auto& ui : ui_list) {
+        ui->SetValid(value);
+    }
+}
+
 
 
 // private 함수

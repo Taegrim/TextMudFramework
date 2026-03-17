@@ -1,15 +1,17 @@
 #pragma once
-#include <iostream>
+#define NOMINMAX
+
 #include <string>
-#include <vector>
+#include <array>	// 컨테이너
+#include <vector>	// 컨테이너
+#include <queue>	// 컨테이너
 #include <algorithm>
 #include <memory>		// 스마트 포인터
-#include <windows.h>
 #include <string_view>
-#include <queue>
 #include <conio.h>	// 키 입력
 #include <chrono>	// 시간
 #include <thread>	// sleep_for
+#include <cassert>	// assert
 
 enum class UIType {
 	Screen,
@@ -48,3 +50,5 @@ struct Event {
 		SceneType next_scene;
 	};
 };
+
+enum class StatusType { Hp, MaxHp, Mp, MaxMp, Atk, Def, COUNT };

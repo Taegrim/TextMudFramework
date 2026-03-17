@@ -1,11 +1,10 @@
 #pragma once
 #include "BaseUI.h"
-#include "UIManager.h"
 
 class ScreenUI : public BaseUI
 {
 public:
-	ScreenUI(int x, int y, int lines) : BaseUI(x, y, lines) {}
+	ScreenUI(int x, int y, int lines) : BaseUI(x, y, lines) { max_messages = lines - 3; }
 
 	void Render() override;
 };
@@ -14,7 +13,7 @@ public:
 class MessageUI : public BaseUI
 {
 public:
-	MessageUI(int x, int y, int lines) : BaseUI(x, y, lines) {}
+	MessageUI(int x, int y, int lines) : BaseUI(x, y, lines) { max_messages = lines - 1; }
 
 	void Render() override;
 };
@@ -23,7 +22,7 @@ public:
 class LogUI : public BaseUI
 {
 public:
-	LogUI(int x, int y, int lines) : BaseUI(x, y, lines) {}
+	LogUI(int x, int y, int lines) : BaseUI(x, y, lines) { max_messages = lines - 1; }
 
 	void Render() override;
 };
@@ -32,7 +31,7 @@ public:
 class MinimapUI : public BaseUI
 {
 public:
-	MinimapUI(int x, int y, int lines) : BaseUI(x, y, lines) {}
+	MinimapUI(int x, int y, int lines) : BaseUI(x, y, lines) { max_messages = lines - 3; }
 
 	void Render() override;
 };
@@ -41,7 +40,7 @@ public:
 class CharacterUI : public BaseUI
 {
 public:
-	CharacterUI(int x, int y, int lines) : BaseUI(x, y, lines) {}
+	CharacterUI(int x, int y, int lines) : BaseUI(x, y, lines) { max_messages = lines - 2; }
 
 	void Render() override;
 };

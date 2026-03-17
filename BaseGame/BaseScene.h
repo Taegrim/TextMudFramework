@@ -1,11 +1,11 @@
 #pragma once
-#include "UIManager.h"
+#include "common.h"
 
 class BaseScene
 {
 public:
-	BaseScene(){}
-	virtual ~BaseScene() {}
+	BaseScene() = default;
+	virtual ~BaseScene() = default;
 
 	virtual void Init() = 0;
 	virtual void ProcessEvent(const Event& e) = 0;
@@ -13,6 +13,6 @@ public:
 	virtual void Render() = 0;
 	virtual void Release() = 0;
 
-	virtual void ChangeScene(SceneType scene);
+	void ChangeScene(SceneType scene);
 };
 

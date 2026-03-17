@@ -1,0 +1,207 @@
+@startuml
+skinparam ClassAttributeIconSize 0
+skinparam PackageStyle rectangle
+
+package "Core / Common" {
+    enum UIType {
+        Screen
+        Log
+        Minimap
+        Character
+        Message
+        None
+    }
+    enum EventType {
+        KeyDown
+        ChangeScene
+        PushScene
+        PopScene
+        Quit
+    }
+    enum SceneOp {
+        Change
+        Push
+        Pop
+        None
+    }
+    enum SceneType {
+        Title
+        Town
+        Dungeon
+        Battle
+        None
+    }
+    enum StatusType {
+        Hp
+        MaxHp
+        Mp
+        MaxMp
+        Atk
+        Def
+        COUNT
+    }
+    struct Event {
+        + type : EventType
+        -- union --
+        + key_code : int
+        + next_scene : SceneType
+    }
+}
+
+package "Managers" {
+    class GameManager <<Singleton>> {
+        - player : unique_ptr<Player>
+        - scene_stack : vector<unique_ptr<BaseScene>>
+        - scene_op : SceneOp
+        - next_scene : SceneType
+        - is_running : bool
+        - event_queue : queue<Event>
+        + {static} GetInstance() : GameManager
+        + Init() : void
+        + Run() : void
+        + Release() : void
+        + PushEvent(ev : Event) : void
+        + GetPlayer() : Player*
+        - ProcessInput() : void
+        - ProcessScene() : void
+        - CreateScene(type : SceneType) : unique_ptr<BaseScene>
+    }
+
+    class UIManager <<Singleton>> {
+        - ui_list : vector<unique_ptr<BaseUI>>
+        - screen_buffers[2] : HANDLE
+        - current_buffer_idx : int
+        + {static} GetInstance() : UIManager
+        + AddMessage(type : UIType, msg : string_view) : void
+        + ClearMessage(type : UIType) : void
+        + ClearAll(ignore_list : vector<UIType>) : void
+        + Render() : void
+        + PrintText(x : int, y : int, sv : string_view) : void
+        + SetVisible(type : UIType, value : bool) : void
+        + SetAllVisible(value : bool) : void
+        - ClearBackBuffer() : void
+    }
+}
+
+package "Scene System" {
+    abstract class BaseScene {
+        + {abstract} Init() : void
+        + {abstract} ProcessEvent(e : Event) : void
+        + {abstract} Update(dt : float) : void
+        + {abstract} Render() : void
+        + {abstract} Release() : void
+        + ChangeScene(scene : SceneType) : void
+    }
+
+    class TitleScene {
+        + Init() : void
+        + ProcessEvent(e : Event) : void
+        + Update(dt : float) : void
+        + Render() : void
+        + Release() : void
+    }
+
+    class TownScene {
+        + Init() : void
+        + ProcessEvent(e : Event) : void
+        + Update(dt : float) : void
+        + Render() : void
+        + Release() : void
+    }
+}
+
+package "UI System" {
+    abstract class BaseUI {
+        # start_x : int
+        # start_y : int
+        # max_lines : int
+        # max_messages : int
+        # is_valid : bool
+        # messages : vector<string>
+        + AddMessage(msg : string_view) : void
+        + Clear() : void
+        + SetValid(valid : bool) : void
+        + IsValid() : bool
+        + {abstract} Render() : void
+    }
+
+    class ScreenUI {
+        + Render() : void
+    }
+    class MessageUI {
+        + Render() : void
+    }
+    class LogUI {
+        + Render() : void
+    }
+    class MinimapUI {
+        + Render() : void
+    }
+    class CharacterUI {
+        + Render() : void
+    }
+}
+
+package "Entity System" {
+    class Status {
+        - status : array<int, COUNT>
+        + TakeDamage(dmg : int) : void
+        + IsDead() : bool
+        + GetStatus(type : StatusType) : int
+        + SetStatus(type : StatusType, val : int) : void
+    }
+
+    abstract class Entity {
+        # name : string
+        # image : string
+        + {abstract} Render() : void
+        + GetName() : string_view
+        + GetImg() : string_view
+    }
+
+    abstract class BattleEntity {
+        # status : Status
+        + {abstract} Render() : void
+        + GetStatus() : Status
+    }
+
+    class Player {
+        - level : int
+        - exp : int
+        - gold : int
+        + Render() : void
+        + GainExp(amount : int) : void
+    }
+
+    class Monster {
+        - reward_gold : int
+        - reward_exp : int
+        + Render() : void
+    }
+
+    class NPC {
+        + Render() : void
+    }
+}
+
+' Relationships
+GameManager "1" *-- "0..*" BaseScene : manages
+GameManager "1" *-- "1" Player : owns
+UIManager "1" *-- "0..*" BaseUI : manages
+
+BaseScene <|-- TitleScene
+BaseScene <|-- TownScene
+
+BaseUI <|-- ScreenUI
+BaseUI <|-- MessageUI
+BaseUI <|-- LogUI
+BaseUI <|-- MinimapUI
+BaseUI <|-- CharacterUI
+
+Entity <|-- BattleEntity
+Entity <|-- NPC
+BattleEntity <|-- Player
+BattleEntity <|-- Monster
+BattleEntity *-- Status : has
+
+@enduml
