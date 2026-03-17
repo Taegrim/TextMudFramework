@@ -20,7 +20,8 @@ public:
     void PushEvent(const Event& ev);
 
 private:
-	std::unique_ptr<BaseScene> scene;
+	std::vector<std::unique_ptr<BaseScene>> scene_stack;
+    SceneOp scene_op;
     SceneType next_scene;
 	bool is_running;
     std::queue<Event> event_queue;
@@ -30,6 +31,7 @@ private:
     ~GameManager();
 
     void ProcessInput();
-    void ChangeScene();
+    void ProcessScene();
+    std::unique_ptr<BaseScene> CreateScene(SceneType type);
 };
 
