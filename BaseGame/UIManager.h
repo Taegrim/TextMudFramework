@@ -17,25 +17,18 @@ public:
     UIManager(const UIManager&) = delete;
     UIManager& operator=(const UIManager&) = delete;
 
-    void AddMessage(UIType type, std::string_view msg);
-    void ClearMessage(UIType type);
-    void ClearAll(const std::vector<UIType>& ignore_list = {});
-    void Render();
-    void PrintText(int x, int y, std::string_view sv);
-    void SetVisible(UIType type, bool value);
+    void AddMessage(GlobalUIType type, std::string_view msg);
+    void ClearMessage(GlobalUIType type);
+    void ClearAll(const std::vector<GlobalUIType>& ignore_list = {});
+    void Render();  // 로그, 선택지 그리기
+    void SetVisible(GlobalUIType type, bool value);
     void SetAllVisible(bool value = true);
 
 private:
     std::vector<std::unique_ptr<BaseUI>> ui_list;
-    
-    // 더블 버퍼링 관련 변수
-    HANDLE screen_buffers[2];
-    int current_buffer_idx;
 
     // 외부에서 new 못하도록 차단
     UIManager();
     ~UIManager();
-
-    void ClearBackBuffer();
 };
 

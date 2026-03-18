@@ -12,5 +12,7 @@ public:
 	void Update(float delta_time) override;
 	void Render() override;
 	void Release() override;
+
+	void SetUI() override;
 };
 

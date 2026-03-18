@@ -13,6 +13,6 @@ public:
 	void Render() override;
 	void Release() override;
 
-	void OnEnter() override;
+	void SetUI() override;
 };
 

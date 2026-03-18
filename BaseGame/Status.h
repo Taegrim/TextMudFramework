@@ -6,9 +6,11 @@ class Status
 public:
 	Status();
 	
-	// 2. C++17 가변 인자 템플릿 생성자
+	// C++17 가변 인자 템플릿 생성자
 	template <typename... Args>
-	Status(Args... args) : status{ static_cast<int>(args)... }{}
+	Status(Args... args) : status{ static_cast<int>(args)... }{
+		static_assert(sizeof...(Args) == static_cast<size_t>(StatusType::COUNT), "스탯 개수가 일치하지 않습니다.");
+	}
 	
 	~Status() = default;
 

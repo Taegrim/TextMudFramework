@@ -10,8 +10,9 @@ public:
 	void AddMessage(std::string_view msg);
 	void Clear();
 
-	void SetValid(bool valid);
-	bool IsValid() const;
+	void SetVisible(bool valid);
+	void ToggleVisible();
+	bool IsVisible() const;
 
 	virtual void Render() = 0;
 
@@ -20,7 +21,7 @@ protected:
 	int start_y;
 	int max_lines;
 	int max_messages;
-	bool is_valid;
-	std::vector<std::string> messages;
+	bool is_visible;
+	std::deque<std::string> messages;
 };
 

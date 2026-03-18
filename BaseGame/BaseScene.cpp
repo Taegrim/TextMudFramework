@@ -1,5 +1,24 @@
 #include "BaseScene.h"
 #include "GameManager.h"
+#include "GameUI.h"
+
+void BaseScene::RenderUI()
+{
+	for (auto& ui : ui_list) {
+		if (ui && ui->IsVisible()) {
+			ui->Render();
+		}
+	}
+}
+
+void BaseScene::AddLocalMessage(SceneUIType type, std::string_view msg)
+{
+	int idx = static_cast<int>(type);
+
+	if (idx >= 0 && idx < static_cast<int>(SceneUIType::COUNT)) {
+		ui_list[idx]->AddMessage(msg);
+	}
+}
 
 void BaseScene::ChangeScene(SceneType scene)
 {
@@ -25,4 +44,14 @@ void BaseScene::PopScene()
 	ev.type = EventType::PopScene;
 
 	GameManager::GetInstance().PushEvent(ev);
+}
+
+BaseUI* BaseScene::GetLocalUI(SceneUIType type)
+{
+	return ui_list[static_cast<int>(type)].get();
+}
+
+bool BaseScene::IsOpaque() const
+{
+	return is_opaque;
 }

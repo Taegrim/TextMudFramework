@@ -5,6 +5,7 @@
 #include "BattleScene.h"
 #include "Player.h"
 #include "UIManager.h"
+#include "RenderSystem.h"
 
 GameManager::GameManager() : scene_stack(), scene_op(SceneOp::None),
 	next_scene(SceneType::None), is_running(true)
@@ -101,7 +102,30 @@ void GameManager::Run()
 			}
 
 			// 로직 업데이트가 끝났다면 최신 상태 그리기
+			// 화면 비우기 -> Scene Render -> Scene UI Render -> 전역 UI Render -> 화면 출력 순
+			RenderSystem::GetInstance().ClearBuffer();
+
+			// 씬 렌더링 시 불투명한 씬을 체크해서 있다면 그 아래는 그리지 않도록 함
+			// 겹쳐 그릴 필요가 있는 씬과 겹쳐 그릴 필요가 없는 씬의 구분 (Z 버퍼링과 유사)
+			
+			// 최상단 스택부터 검사해서 불투명한 씬을 찾고 찾았다면 break
+			int idx = 0;
+			for (int i = static_cast<int>(scene_stack.size()) - 1; i >= 0; --i) {
+				if (scene_stack[i]->IsOpaque()) {
+					idx = i;
+					break;
+				}
+			}
+
+			// 불투명한 씬부터 렌더링, 이 아래는 어차피 안보이므로 그릴 필요 X
+			for (int i = idx; i < scene_stack.size(); ++i) {
+				scene_stack[i]->Render();
+				scene_stack[i]->RenderUI();
+			}
+
+
 			UIManager::GetInstance().Render();
+			RenderSystem::GetInstance().Draw();
 		}
 
 		// 짧게 휴식
@@ -152,8 +176,8 @@ void GameManager::ProcessScene()
 		[[fallthrough]];
 
 	case SceneOp::Push:
-		// 씬 진입 직전 로그 제외 UI 모두 날리기
-		UIManager::GetInstance().ClearAll({UIType::Log});
+		// 메세지 부분만 날리기
+		UIManager::GetInstance().ClearMessage(GlobalUIType::Message);
 
 		// 씬의 진입 직전 모든 UI 키기
 		UIManager::GetInstance().SetAllVisible(true);
@@ -167,14 +191,12 @@ void GameManager::ProcessScene()
 			scene_stack.back()->Release();
 			scene_stack.pop_back();
 
-			// 씬 진입 직전 로그 제외 UI 모두 날리기
-			UIManager::GetInstance().ClearAll({ UIType::Log });
+			// 메세지 부분만 날리기
+			UIManager::GetInstance().ClearMessage(GlobalUIType::Message);
 
-			// Pop 이후 씬이 남아있다면 갱신
 			// 씬이 없다면 종료
 			if (!scene_stack.empty()) {
-				UIManager::GetInstance().SetAllVisible(true);
-				scene_stack.back()->OnEnter();
+				scene_stack.back()->SetUI();
 			}
 			else {
 				is_running = false;
@@ -210,10 +232,10 @@ std::unique_ptr<BaseScene> GameManager::CreateScene(SceneType type)
 		
 	case SceneType::Dungeon:
 		return std::make_unique<DungeonScene>();
-		break;
+
 	case SceneType::Battle:
 		return std::make_unique<BattleScene>();
-		break;
+
 	}
 	return nullptr;
 }

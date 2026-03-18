@@ -13,13 +13,17 @@
 #include <thread>	// sleep_for
 #include <cassert>	// assert
 
-enum class UIType {
-	Screen,
+enum class GlobalUIType {
 	Log,
-	Minimap,
-	Character,
 	Message,
-	None
+	COUNT
+};
+
+enum class SceneUIType {
+	Screen,
+	CharacterInfo,
+	Minimap,
+	COUNT
 };
 
 enum class EventType {
