@@ -14,3 +14,18 @@ Status& BattleEntity::GetStatus()
 {
 	return status;
 }
+
+int BattleEntity::GetHp() const
+{
+	return status.GetHp();
+}
+
+int BattleEntity::TakeDamage(int dmg)
+{
+	return status.TakeDamage(dmg);
+}
+
+bool BattleEntity::IsDead() const
+{
+	return status.IsDead();
+}

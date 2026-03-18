@@ -56,3 +56,9 @@ struct Event {
 };
 
 enum class StatusType { Hp, MaxHp, Mp, MaxMp, Atk, Def, COUNT };
+
+enum class MonsterType {
+	Slime,
+	Goblin,
+	None
+};

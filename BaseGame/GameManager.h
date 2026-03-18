@@ -3,6 +3,7 @@
 
 class BaseScene;
 class Player;
+class BattleManager;
 
 class GameManager
 {
@@ -21,10 +22,12 @@ public:
     void Release();
     void PushEvent(const Event& ev);
 
-    Player* GetPlayer() const ;
+    Player* GetPlayer() const;
+    BattleManager* GetBattleManager() const;
 
 private:
     std::unique_ptr<Player> player;
+    std::unique_ptr<BattleManager> battle_manager;
 	std::vector<std::unique_ptr<BaseScene>> scene_stack;
     SceneOp scene_op;
     SceneType next_scene;

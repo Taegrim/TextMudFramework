@@ -120,6 +120,12 @@
     <ClCompile Include="RenderSystem.cpp">
       <Filter>소스 파일\Core</Filter>
     </ClCompile>
+    <ClCompile Include="BattleManager.cpp">
+      <Filter>소스 파일\GamePlay\Battle</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterPool.cpp">
+      <Filter>소스 파일\GamePlay</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UIManager.h">
@@ -172,6 +178,12 @@
     </ClInclude>
     <ClInclude Include="RenderSystem.h">
       <Filter>헤더 파일\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleManager.h">
+      <Filter>헤더 파일\GamePlay\Battle</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterPool.h">
+      <Filter>헤더 파일\GamePlay</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

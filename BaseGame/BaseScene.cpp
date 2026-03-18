@@ -2,6 +2,11 @@
 #include "GameManager.h"
 #include "GameUI.h"
 
+BaseScene::BaseScene()
+{
+	player = GameManager::GetInstance().GetPlayer();
+}
+
 void BaseScene::RenderUI()
 {
 	for (auto& ui : ui_list) {

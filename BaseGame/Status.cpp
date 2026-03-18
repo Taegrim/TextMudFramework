@@ -5,7 +5,7 @@ Status::Status()
 	status.fill(0);
 }
 
-void Status::TakeDamage(int dmg)
+int Status::TakeDamage(int dmg)
 {
 	int total_damage = std::max(1, dmg - GetStatus(StatusType::Def));
 	
@@ -13,6 +13,8 @@ void Status::TakeDamage(int dmg)
 	if ((*this)[StatusType::Hp] <= 0) {
 		(*this)[StatusType::Hp] = 0;
 	}
+
+	return total_damage;
 }
 
 bool Status::IsDead() const
@@ -47,9 +49,4 @@ void Status::SetStatus(StatusType type, int value)
 void Status::SetHp(int value)
 {
 	SetStatus(StatusType::Hp, value);
-}
-
-void Status::ShowStatus()
-{
-	// ½ºÅÈ È®ÀÎ
 }

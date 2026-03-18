@@ -15,13 +15,11 @@ void TownScene::Init()
 
 void TownScene::SetUI()
 {
-    Player* p = GameManager::GetInstance().GetPlayer();
-
     // Character UI에 플레이어의 스탯을 출력
-    std::string hp_text = "HP: " + std::to_string(p->GetStatus()[StatusType::Hp]) +
-        " / " + std::to_string(p->GetStatus()[StatusType::MaxHp]);
+    std::string hp_text = "HP: " + std::to_string(player->GetStatus()[StatusType::Hp]) +
+        " / " + std::to_string(player->GetStatus()[StatusType::MaxHp]);
 
-    ui_list[static_cast<int>(SceneUIType::CharacterInfo)]->AddMessage(std::string(p->GetName()) + "의 상태");
+    ui_list[static_cast<int>(SceneUIType::CharacterInfo)]->AddMessage(std::string(player->GetName()) + "의 상태");
     ui_list[static_cast<int>(SceneUIType::CharacterInfo)]->AddMessage(hp_text);
     
     auto screen = GetLocalUI(SceneUIType::Screen);
@@ -49,6 +47,7 @@ void TownScene::ProcessEvent(const Event& e)
         switch (e.key_code) {
         case '1':
             UIManager::GetInstance().AddMessage(GlobalUIType::Log, "[휴식] 여관에서 푹 쉬었습니다. (HP 회복)");
+            // 회복
             break;
 
         case '2':
@@ -57,8 +56,13 @@ void TownScene::ProcessEvent(const Event& e)
             break;
 
         case '3':
-            ui_list[static_cast<int>(SceneUIType::CharacterInfo)]->ToggleVisible();
+        {
+            auto info = GetLocalUI(SceneUIType::CharacterInfo);
+            if (info) {
+                info->ToggleVisible();
+            }
             break;
+        }
 
         default:
             UIManager::GetInstance().AddMessage(GlobalUIType::Message, "잘못된 입력입니다.");

@@ -44,8 +44,13 @@ void DungeonScene::ProcessEvent(const Event& e)
             break;
 
         case '3':
-            ui_list[static_cast<int>(SceneUIType::Minimap)]->ToggleVisible();
+        {   
+            auto minimap = GetLocalUI(SceneUIType::Minimap);
+            if (minimap) {
+                minimap->ToggleVisible();
+            }
             break;
+        }
 
         default:
             UIManager::GetInstance().AddMessage(GlobalUIType::Message, "잘못된 입력입니다.");

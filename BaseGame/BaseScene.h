@@ -2,11 +2,12 @@
 #include "common.h"
 
 class BaseUI;
+class Player;
 
 class BaseScene
 {
 public:
-	BaseScene() = default;
+	BaseScene();
 	virtual ~BaseScene() = default;
 
 	virtual void Init() = 0;
@@ -27,5 +28,6 @@ public:
 protected:
 	std::array<std::unique_ptr<BaseUI>, static_cast<int>(SceneUIType::COUNT)> ui_list;
 	bool is_opaque = true;
+	Player* player = nullptr;
 };
 

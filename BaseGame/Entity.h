@@ -11,12 +11,15 @@ public:
 
 	std::string_view GetName() const;
 	std::string_view GetImg() const;
+	bool IsVisible() const;
 
 	void SetName(std::string_view name);
 	void SetImage(std::string_view img);
+	void SetVisible(bool value);
 
 protected:
 	std::string name;
 	std::string image;
+	bool is_visible = true;
 };
 

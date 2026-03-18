@@ -1,6 +1,8 @@
 #pragma once
 #include "BaseScene.h"
 
+class BattleManager;
+
 class BattleScene : public BaseScene
 {
 public:
@@ -14,5 +16,9 @@ public:
 	void Release() override;
 
 	void SetUI() override;
+
+private:
+	BattleManager* bm = nullptr;
+	Monster* monster = nullptr;
 };
 

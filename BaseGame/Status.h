@@ -16,7 +16,7 @@ public:
 
 
 	// 스탯 관련 로직
-	void TakeDamage(int dmg);
+	int TakeDamage(int dmg);
 	bool IsDead() const;
 
 	int& operator[](StatusType type) {
@@ -38,8 +38,6 @@ public:
 
 	void SetStatus(StatusType type, int value);
 	void SetHp(int value);
-
-	void ShowStatus();
 
 private:
 	std::array<int, static_cast<int>(StatusType::COUNT)> status;

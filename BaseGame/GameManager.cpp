@@ -6,6 +6,8 @@
 #include "Player.h"
 #include "UIManager.h"
 #include "RenderSystem.h"
+#include "BattleManager.h"
+#include "MonsterPool.h"
 
 GameManager::GameManager() : scene_stack(), scene_op(SceneOp::None),
 	next_scene(SceneType::None), is_running(true)
@@ -22,6 +24,12 @@ void GameManager::Init()
 
 	// 플레이어 생성
 	player = std::make_unique<Player>("용사", "@", Status(100, 100, 10, 10, 50, 30));
+
+	// 전투 매니저 생성
+	battle_manager = std::make_unique<BattleManager>(player.get());
+
+	// 몬스터 초기 생성
+	MonsterPool::GetInstance().Init();
 
 	// 초기 씬
 	scene_stack.push_back(CreateScene(SceneType::Title));
@@ -118,7 +126,7 @@ void GameManager::Run()
 			}
 
 			// 불투명한 씬부터 렌더링, 이 아래는 어차피 안보이므로 그릴 필요 X
-			for (int i = idx; i < scene_stack.size(); ++i) {
+			for (int i = idx; i < static_cast<int>(scene_stack.size()); ++i) {
 				scene_stack[i]->Render();
 				scene_stack[i]->RenderUI();
 			}
@@ -150,6 +158,11 @@ void GameManager::PushEvent(const Event& ev)
 Player* GameManager::GetPlayer() const
 {
 	return player.get();
+}
+
+BattleManager* GameManager::GetBattleManager() const
+{
+	return battle_manager.get();
 }
 
 

@@ -9,7 +9,7 @@ void ScreenUI::Render()
     RenderSystem::GetInstance().PrintText(start_x, start_y + 1,
         "           [ 메인 뷰포트 ]              ");
 
-    // 내용
+    // 임시 내용
     for (int i = 0; i < messages.size(); ++i) {
         RenderSystem::GetInstance().PrintText(start_x + 2, start_y + 7 + i, messages[i]);
     }
