@@ -33,12 +33,12 @@ void TownScene::ProcessEvent(const Event& e)
 
         switch (e.key_code) {
         case '1':
-            UIManager::GetInstance().AddMessage(UIType::Message, "여관에서 푹 쉬었습니다. (HP 회복)");
-            // p->GetEditableStatus()->Heal(100); 같은 로직 추가 가능!
+            UIManager::GetInstance().AddMessage(UIType::Log, "[휴식] 여관에서 푹 쉬었습니다. (HP 회복)");
+            // p->GetEditableStatus()->Heal(100);
             break;
         case '2':
-            UIManager::GetInstance().AddMessage(UIType::Message, "어두운 던전으로 향합니다...");
-            // 던전 씬으로 ChangeScene 이벤트 푸시
+            UIManager::GetInstance().AddMessage(UIType::Log, "[이동] 어두운 던전으로 향합니다...");
+            ChangeScene(SceneType::Dungeon);
             break;
         default:
             UIManager::GetInstance().AddMessage(UIType::Message, "잘못된 입력입니다.");

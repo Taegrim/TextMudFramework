@@ -1,3 +1,5 @@
+' ctrl + shift + p -> plantuml:export current diagram
+
 @startuml
 skinparam ClassAttributeIconSize 0
 skinparam PackageStyle rectangle

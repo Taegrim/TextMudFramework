@@ -1,6 +1,8 @@
 #include "GameManager.h"
 #include "TitleScene.h"
 #include "TownScene.h"
+#include "DungeonScene.h"
+#include "BattleScene.h"
 #include "Player.h"
 #include "UIManager.h"
 
@@ -150,8 +152,8 @@ void GameManager::ProcessScene()
 		[[fallthrough]];
 
 	case SceneOp::Push:
-		// 씬 진입 직전 UI 내용 모두 날리기
-		UIManager::GetInstance().ClearAll();
+		// 씬 진입 직전 로그 제외 UI 모두 날리기
+		UIManager::GetInstance().ClearAll({UIType::Log});
 
 		// 씬의 진입 직전 모든 UI 키기
 		UIManager::GetInstance().SetAllVisible(true);
@@ -165,8 +167,16 @@ void GameManager::ProcessScene()
 			scene_stack.back()->Release();
 			scene_stack.pop_back();
 
-			// Pop 시 마지막 씬이었다면 게임 종료
-			if (scene_stack.empty()) {
+			// 씬 진입 직전 로그 제외 UI 모두 날리기
+			UIManager::GetInstance().ClearAll({ UIType::Log });
+
+			// Pop 이후 씬이 남아있다면 갱신
+			// 씬이 없다면 종료
+			if (!scene_stack.empty()) {
+				UIManager::GetInstance().SetAllVisible(true);
+				scene_stack.back()->OnEnter();
+			}
+			else {
 				is_running = false;
 			}
 		}
@@ -199,10 +209,10 @@ std::unique_ptr<BaseScene> GameManager::CreateScene(SceneType type)
 		return std::make_unique<TownScene>();
 		
 	case SceneType::Dungeon:
-		//return std::make_unique<DungeonScene>();
+		return std::make_unique<DungeonScene>();
 		break;
 	case SceneType::Battle:
-		//return std::make_unique<BattleScene>();
+		return std::make_unique<BattleScene>();
 		break;
 	}
 	return nullptr;

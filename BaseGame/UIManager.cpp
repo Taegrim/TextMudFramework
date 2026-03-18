@@ -28,8 +28,8 @@ UIManager::UIManager() : current_buffer_idx(0)
     // 3: Character (x:30, y:2, 5줄) -> 덮어쓰기
     ui_list.push_back(std::make_unique<CharacterUI>(30, 2, 5));
 
-    // 4: Message (x:0, y:21, 3줄)
-    ui_list.push_back(std::make_unique<MessageUI>(0, 21, 3));
+    // 4: Message (x:0, y:21, 4줄)
+    ui_list.push_back(std::make_unique<MessageUI>(0, 21, 4));
 }
 
 UIManager::~UIManager()

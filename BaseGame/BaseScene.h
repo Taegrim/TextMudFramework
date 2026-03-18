@@ -13,6 +13,11 @@ public:
 	virtual void Render() = 0;
 	virtual void Release() = 0;
 
+	// 화면 갱신용 함수
+	virtual void OnEnter() {}
+
 	void ChangeScene(SceneType scene);
+	void PushScene(SceneType scene);
+	void PopScene();
 };
 

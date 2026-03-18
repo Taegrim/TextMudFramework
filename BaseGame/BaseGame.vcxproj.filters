@@ -31,17 +31,44 @@
     <Filter Include="헤더 파일\Entity">
       <UniqueIdentifier>{ab678111-05ab-4ccb-a69b-7a421e761cc8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\System">
+    <Filter Include="소스 파일\Core">
       <UniqueIdentifier>{4eb205e8-7e8c-4ed2-9a01-4853c39b2357}</UniqueIdentifier>
     </Filter>
-    <Filter Include="헤더 파일\System">
+    <Filter Include="소스 파일\Entity\Actor">
+      <UniqueIdentifier>{f594ab3b-71bf-4c66-a6c2-7dff32526519}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Entity\Component">
+      <UniqueIdentifier>{fefc904e-7b79-4d90-8c2f-da5fee2a5c51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Entity\Actor">
+      <UniqueIdentifier>{4fb4b3c4-85fb-41c4-aad6-f9ac492171a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Entity\Component">
+      <UniqueIdentifier>{36da8593-749b-41cc-a933-f96fac0d29ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Core">
       <UniqueIdentifier>{fd9b411f-444a-4136-877f-5a2080d02b55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\GamePlay">
+      <UniqueIdentifier>{cb5afef7-ecdd-4dc1-b95a-b55609548787}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\GamePlay">
+      <UniqueIdentifier>{931f4cb1-5a7c-4230-bd93-d93b6a4d6165}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\GamePlay\Inventory">
+      <UniqueIdentifier>{96230372-5b1c-46b3-b05d-6e579e22199c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\GamePlay\Battle">
+      <UniqueIdentifier>{28187b27-5cae-4904-8203-648e893cf587}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\GamePlay\Inventory">
+      <UniqueIdentifier>{472daab5-1b54-453b-a635-683caca5b4d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\GamePlay\Battle">
+      <UniqueIdentifier>{47251987-039e-4db5-a9f1-e6d7fea6dccf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="UIManager.cpp">
       <Filter>소스 파일\UI</Filter>
     </ClCompile>
@@ -57,35 +84,41 @@
     <ClCompile Include="GameUI.cpp">
       <Filter>소스 파일\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>소스 파일\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="NPC.cpp">
-      <Filter>소스 파일\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="BattleEntity.cpp">
-      <Filter>소스 파일\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="Status.cpp">
-      <Filter>소스 파일\System</Filter>
-    </ClCompile>
     <ClCompile Include="GameManager.cpp">
-      <Filter>소스 파일\System</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>소스 파일\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="Monster.cpp">
-      <Filter>소스 파일\Entity</Filter>
+      <Filter>소스 파일\Core</Filter>
     </ClCompile>
     <ClCompile Include="TownScene.cpp">
       <Filter>소스 파일\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="BattleEntity.cpp">
+      <Filter>소스 파일\Entity\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>소스 파일\Entity\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>소스 파일\Entity\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="NPC.cpp">
+      <Filter>소스 파일\Entity\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일\Entity\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>소스 파일\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Status.cpp">
+      <Filter>소스 파일\Entity\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="DungeonScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="common.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="UIManager.h">
       <Filter>헤더 파일\UI</Filter>
     </ClInclude>
@@ -101,28 +134,37 @@
     <ClInclude Include="GameUI.h">
       <Filter>헤더 파일\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>헤더 파일\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="NPC.h">
-      <Filter>헤더 파일\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="BattleEntity.h">
-      <Filter>헤더 파일\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="Status.h">
-      <Filter>헤더 파일\System</Filter>
-    </ClInclude>
     <ClInclude Include="GameManager.h">
-      <Filter>헤더 파일\System</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>헤더 파일\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="Monster.h">
-      <Filter>헤더 파일\Entity</Filter>
+      <Filter>헤더 파일\Core</Filter>
     </ClInclude>
     <ClInclude Include="TownScene.h">
+      <Filter>헤더 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>헤더 파일\Entity\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleEntity.h">
+      <Filter>헤더 파일\Entity\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Entity.h">
+      <Filter>헤더 파일\Entity\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>헤더 파일\Entity\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="NPC.h">
+      <Filter>헤더 파일\Entity\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Status.h">
+      <Filter>헤더 파일\Entity\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="common.h">
+      <Filter>헤더 파일\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="DungeonScene.h">
+      <Filter>헤더 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleScene.h">
       <Filter>헤더 파일\Scene</Filter>
     </ClInclude>
   </ItemGroup>
