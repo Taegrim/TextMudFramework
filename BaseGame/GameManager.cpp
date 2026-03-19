@@ -118,7 +118,7 @@ void GameManager::Run()
 			
 			// 최상단 스택부터 검사해서 불투명한 씬을 찾고 찾았다면 break
 			int idx = 0;
-			for (int i = static_cast<int>(scene_stack.size()) - 1; i >= 0; --i) {
+			for (int i = scene_stack.size() - 1; i >= 0; --i) {
 				if (scene_stack[i]->IsOpaque()) {
 					idx = i;
 					break;
@@ -126,7 +126,7 @@ void GameManager::Run()
 			}
 
 			// 불투명한 씬부터 렌더링, 이 아래는 어차피 안보이므로 그릴 필요 X
-			for (int i = idx; i < static_cast<int>(scene_stack.size()); ++i) {
+			for (int i = idx; i < scene_stack.size(); ++i) {
 				scene_stack[i]->Render();
 				scene_stack[i]->RenderUI();
 			}

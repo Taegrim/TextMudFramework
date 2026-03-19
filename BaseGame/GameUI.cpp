@@ -64,5 +64,5 @@ void CharacterUI::Render()
     }
 
     // 하단 테두리
-    RenderSystem::GetInstance().PrintText(start_x, start_y + max_lines, "+------------+");
+    RenderSystem::GetInstance().PrintText(start_x, start_y + max_lines - 1, "+------------+");
 }

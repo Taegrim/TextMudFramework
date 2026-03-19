@@ -9,12 +9,12 @@ public:
 
 	virtual void Render() = 0;
 	
+	int TakeDamage(int dmg);
+	bool IsDead() const;
+
 	const Status& GetStatus() const;
 	Status& GetStatus();
 	int GetHp() const;
-
-	int TakeDamage(int dmg);
-	bool IsDead() const;
 
 protected:
 	Status status;

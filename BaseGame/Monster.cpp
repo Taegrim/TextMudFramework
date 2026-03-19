@@ -19,16 +19,6 @@ void Monster::Render()
 	// ·»´õ¸µ
 }
 
-int Monster::GetRewardExp() const
-{
-	return reward_exp;
-}
-
-int Monster::GetRewardGold() const
-{
-	return reward_gold;
-}
-
 void Monster::Spawn(std::string_view name, std::string_view img, const Status& stat, int gold, int exp)
 {
 	this->name = name;
@@ -39,3 +29,12 @@ void Monster::Spawn(std::string_view name, std::string_view img, const Status& s
 	this->is_visible = true;
 }
 
+int Monster::GetRewardExp() const
+{
+	return reward_exp;
+}
+
+int Monster::GetRewardGold() const
+{
+	return reward_gold;
+}

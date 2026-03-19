@@ -1,7 +1,6 @@
 #pragma once
 #include "common.h"
 #include "Monster.h"
-#include <random>
 
 class MonsterPool
 {
@@ -22,7 +21,6 @@ public:
 
 private:
 	std::vector<std::unique_ptr<Monster>> pool;
-	std::mt19937 gen;
 
 	MonsterPool();
 	~MonsterPool();

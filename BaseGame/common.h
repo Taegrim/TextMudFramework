@@ -12,6 +12,21 @@
 #include <chrono>	// 시간
 #include <thread>	// sleep_for
 #include <cassert>	// assert
+#include <random>
+
+// 랜덤값 얻는 유틸 함수
+namespace RandomUtil {
+	inline std::mt19937& GetEngine() {
+		static std::random_device rd;
+		static std::mt19937 gen(rd());
+		return gen;
+	}
+
+	inline int GetRange(int min, int max) {
+		std::uniform_int_distribution<int> uid(min, max);
+		return uid(GetEngine());
+	}
+}
 
 enum class GlobalUIType {
 	Log,

@@ -10,15 +10,20 @@ public:
 	BattleManager(Player* p);
 	~BattleManager() = default;
 
-	void StartBattle(Monster* m);
-	void PlayerAttack();
+	void StartBattle(const std::vector<Monster*>& monsters);
+	void PlayerAttack(int target_idx);
 	void MonsterAttack();
 
 	bool IsBattleOver() const;
-	Monster* GetMonster() const;
+	bool IsPlayerVictory() const;
+	void DistributeReward();
+
+	int GetTotalExp() const;
 
 private:
 	Player* player = nullptr;
-	Monster* monster = nullptr;
+	std::vector<Monster*> monster_list;
+	int total_exp = 0;
+	int total_gold = 0;
 };
 

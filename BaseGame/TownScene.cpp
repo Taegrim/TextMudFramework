@@ -8,7 +8,7 @@
 void TownScene::Init()
 {
     ui_list[static_cast<int>(SceneUIType::Screen)] = std::make_unique<ScreenUI>(2, 1, 15);
-    ui_list[static_cast<int>(SceneUIType::CharacterInfo)] = std::make_unique<CharacterUI>(30, 1, 5);
+    ui_list[static_cast<int>(SceneUIType::CharacterInfo)] = std::make_unique<CharacterUI>(30, 1, 7);
 
     SetUI();
 }
@@ -19,8 +19,16 @@ void TownScene::SetUI()
     std::string hp_text = "HP: " + std::to_string(player->GetStatus()[StatusType::Hp]) +
         " / " + std::to_string(player->GetStatus()[StatusType::MaxHp]);
 
+    std::string level_text = "Lv : " + std::to_string(player->GetLevel());
+    std::string exp_text = "EXP : " + std::to_string(player->GetExp());
+    std::string gold_text = "GOLD : " + std::to_string(player->GetGold());
+
     ui_list[static_cast<int>(SceneUIType::CharacterInfo)]->AddMessage(std::string(player->GetName()) + "의 상태");
     ui_list[static_cast<int>(SceneUIType::CharacterInfo)]->AddMessage(hp_text);
+    ui_list[static_cast<int>(SceneUIType::CharacterInfo)]->AddMessage(level_text);
+    ui_list[static_cast<int>(SceneUIType::CharacterInfo)]->AddMessage(exp_text);
+    ui_list[static_cast<int>(SceneUIType::CharacterInfo)]->AddMessage(gold_text);
+
     
     auto screen = GetLocalUI(SceneUIType::Screen);
     if (screen) {
@@ -47,7 +55,8 @@ void TownScene::ProcessEvent(const Event& e)
         switch (e.key_code) {
         case '1':
             UIManager::GetInstance().AddMessage(GlobalUIType::Log, "[휴식] 여관에서 푹 쉬었습니다. (HP 회복)");
-            // 회복
+            player->MaxHeal();
+            SetUI();
             break;
 
         case '2':

@@ -3,8 +3,6 @@
 
 MonsterPool::MonsterPool()
 {
-	std::random_device rd;
-	gen.seed(rd());
 }
 
 MonsterPool::~MonsterPool()
@@ -20,9 +18,7 @@ void MonsterPool::Init(int capacity)
 
 Monster* MonsterPool::SpawnRandomMonster()
 {
-	std::uniform_int_distribution uid(0, static_cast<int>(MonsterType::None) - 1);
-	MonsterType type = static_cast<MonsterType>(uid(gen));
-
+	MonsterType type = static_cast<MonsterType>(RandomUtil::GetRange(0, static_cast<int>(MonsterType::None) - 1));
 	return SpawnMonster(type);
 }
 

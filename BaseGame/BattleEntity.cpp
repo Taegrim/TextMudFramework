@@ -5,6 +5,16 @@ BattleEntity::BattleEntity(std::string_view name, std::string_view img, const St
 {
 }
 
+int BattleEntity::TakeDamage(int dmg)
+{
+	return status.TakeDamage(dmg);
+}
+
+bool BattleEntity::IsDead() const
+{
+	return status.IsDead();
+}
+
 const Status& BattleEntity::GetStatus() const
 {
 	return status;
@@ -18,14 +28,4 @@ Status& BattleEntity::GetStatus()
 int BattleEntity::GetHp() const
 {
 	return status.GetHp();
-}
-
-int BattleEntity::TakeDamage(int dmg)
-{
-	return status.TakeDamage(dmg);
-}
-
-bool BattleEntity::IsDead() const
-{
-	return status.IsDead();
 }

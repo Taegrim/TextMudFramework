@@ -2,6 +2,13 @@
 #include "BaseScene.h"
 
 class BattleManager;
+class Monster;
+
+enum class BattleState {
+	Act,
+	TargetEnemy,
+	TargetFriendly
+};
 
 class BattleScene : public BaseScene
 {
@@ -19,6 +26,7 @@ public:
 
 private:
 	BattleManager* bm = nullptr;
-	Monster* monster = nullptr;
+	std::vector<Monster*> monster_list;
+	BattleState current_state = BattleState::Act;
 };
 
