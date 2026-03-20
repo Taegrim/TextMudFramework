@@ -20,8 +20,8 @@ package "Core & Managers" {
         + void Run()
         + void Release()
         + void PushEvent(const Event& ev)
-        + Player* GetPlayer()
-        + BattleManager* GetBattleManager()
+        + Player* GetPlayer() const
+        + BattleManager* GetBattleManager() const
     }
 
     class RenderSystem <<Singleton>> {
@@ -36,15 +36,16 @@ package "Core & Managers" {
     class UIManager <<Singleton>> {
         - std::vector<std::unique_ptr<BaseUI>> ui_list
         + static UIManager& GetInstance()
-        + void AddMessage(...)
-        + void ClearMessage(...)
+        + void AddMessage(GlobalUIType type, std::string_view msg)
+        + void ClearMessage(GlobalUIType type)
+        + void ClearAll(const std::vector<GlobalUIType>& ignore_list)
         + void Render()
-        + void SetVisible(...)
+        + void SetVisible(GlobalUIType type, bool value)
+        + void SetAllVisible(bool value)
     }
 
     class MonsterPool <<Singleton>> {
         - std::vector<std::unique_ptr<Monster>> pool
-        - std::mt19937 gen
         + static MonsterPool& GetInstance()
         + void Init(int capacity)
         + Monster* SpawnRandomMonster()
@@ -53,13 +54,16 @@ package "Core & Managers" {
 
     class BattleManager {
         - Player* player
-        - Monster* monster
+        - std::vector<Monster*> monster_list
+        - int total_exp
+        - int total_gold
         + BattleManager(Player* p)
-        + void StartBattle(Monster* m)
-        + void PlayerAttack()
+        + void StartBattle(const std::vector<Monster*>& monsters)
+        + void PlayerAttack(int target_idx)
         + void MonsterAttack()
         + bool IsBattleOver() const
-        + Monster* GetMonster() const
+        + bool IsPlayerVictory() const
+        + void DistributeReward()
     }
 }
 
@@ -71,9 +75,16 @@ package "Data & Structs" {
 
     class Status {
         - std::array<int, COUNT> status
+        - std::array<int, COUNT> bonus_status
         + Status(...) 
         + int TakeDamage(int dmg)
         + bool IsDead() const
+        + void Heal(int amount)
+        + void MaxHeal()
+        + void AddBonus(StatusType type, int amount)
+        + void RemoveBonus(StatusType type, int amount)
+        + int operator[](StatusType type) const
+        + int GetTotal(StatusType type) const
         + int GetHp() const
     }
 }
@@ -95,13 +106,23 @@ package "Entities" {
         + virtual void Render() = 0
         + int TakeDamage(int dmg)
         + bool IsDead() const
+        + const Status& GetStatus() const
+        + Status& GetStatus()
     }
 
     class Player {
         - int level
         - int exp
         - int gold
-        + void Render() override
+        - std::vector<std::unique_ptr<Item>> inventory
+        - std::array<Equipment*, COUNT> equipment_slots
+        + void Heal(int amount)
+        + void MaxHeal()
+        + void AddItem(std::unique_ptr<Item> item)
+        + void RemoveItem(int index)
+        + void Equip(Equipment* equipment)
+        + void UnEquip(EquipmentSlot slot)
+        + Equipment* GetEquippedItem(EquipmentSlot slot) const
         + void GainExp(int amount)
     }
 
@@ -110,6 +131,33 @@ package "Entities" {
         - int reward_exp
         + void Render() override
         + void Spawn(...)
+    }
+}
+
+package "Items" {
+    abstract class Item {
+        # std::string name
+        # std::string description
+        # int price
+        # ItemType type
+        + virtual void Use(Player* player) = 0
+    }
+
+    class Equipment {
+        - EquipmentSlot slot
+        - std::vector<std::pair<StatusType, int>> bonus_stat
+        - bool is_equipped
+        + void Use(Player* player) override
+        + void SetBonusStat(const std::vector<std::pair<StatusType, int>>& stats)
+    }
+
+    class Consumable {
+        - int amount
+        + void Use(Player* player) override
+    }
+
+    class JunkItem {
+        + void Use(Player* player) override
     }
 }
 
@@ -145,17 +193,16 @@ package "Scenes" {
         + virtual void RenderUI()
         + virtual void Release() = 0
         + virtual void SetUI()
+        + virtual void SetMenu()
     }
 
-    class TitleScene {
-    }
-    class TownScene {
-    }
-    class DungeonScene {
-    }
+    class TitleScene
+    class TownScene
+    class DungeonScene
     class BattleScene {
         - BattleManager* bm
-        - Monster* monster
+        - std::vector<Monster*> monster_list
+        - BattleState current_state
     }
 }
 
@@ -166,6 +213,10 @@ Entity <|-- NPC
 Entity <|-- BattleEntity
 BattleEntity <|-- Player
 BattleEntity <|-- Monster
+
+Item <|-- Equipment
+Item <|-- Consumable
+Item <|-- JunkItem
 
 BaseUI <|-- ScreenUI
 BaseUI <|-- MessageUI
@@ -183,16 +234,19 @@ GameManager *-- Player : owns
 GameManager *-- BattleManager : owns
 GameManager *-- BaseScene : owns stack
 UIManager *-- BaseUI : owns
-
 MonsterPool *-- Monster : owns pool
 BattleEntity *-- Status : composition
 
+' Item Relationships
+Player *-- Item : owns (inventory)
+Player o-- Equipment : references (equipment_slots)
+
 ' References (Pointers)
 BattleManager o-- Player : references
-BattleManager o-- Monster : references
+BattleManager o-- Monster : references (monster_list)
 
 BattleScene o-- BattleManager : references
-BattleScene o-- Monster : references
+BattleScene o-- Monster : references (monster_list)
 
 BaseScene o-- Player : references
 BaseScene *-- BaseUI : owns local UIs

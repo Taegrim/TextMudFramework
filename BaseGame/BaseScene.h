@@ -16,7 +16,8 @@ public:
 	virtual void Render() = 0;		//	배경, 캐릭터 등의 render
 	virtual void RenderUI();		//	씬 전용 UI
 	virtual void Release() = 0;
-	virtual void SetUI() {}		// 그리기 전용 init
+	virtual void SetUI() {}		// 씬 전용 로컬 UI 세팅
+	virtual void SetMenu() {}	// 선택지 메뉴 세팅
 
 	void AddLocalMessage(SceneUIType type, std::string_view msg);
 	void ChangeScene(SceneType scene);

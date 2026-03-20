@@ -39,7 +39,8 @@ void BattleManager::PlayerAttack(int target_idx)
 	int damage = monster->TakeDamage(atk);
 
 	UIManager::GetInstance().AddMessage(GlobalUIType::Log,
-		"[공격] " + std::string(monster->GetName()) + std::to_string(target_idx + 1) + "에게 " + std::to_string(damage) + "데미지를 입혔습니다!");
+		"[공격] " + std::string(monster->GetName()) + "[" +  std::to_string(target_idx + 1) +
+		"]에게 " + std::to_string(damage) + "데미지를 입혔습니다!");
 
 	if (monster->IsDead()) {
 		UIManager::GetInstance().AddMessage(GlobalUIType::Log,

@@ -190,7 +190,7 @@ void GameManager::ProcessScene()
 
 	case SceneOp::Push:
 		// 메세지 부분만 날리기
-		UIManager::GetInstance().ClearMessage(GlobalUIType::Message);
+		UIManager::GetInstance().ClearMessage(GlobalUIType::Menu);
 
 		// 씬의 진입 직전 모든 UI 키기
 		UIManager::GetInstance().SetAllVisible(true);
@@ -205,11 +205,12 @@ void GameManager::ProcessScene()
 			scene_stack.pop_back();
 
 			// 메세지 부분만 날리기
-			UIManager::GetInstance().ClearMessage(GlobalUIType::Message);
+			UIManager::GetInstance().ClearMessage(GlobalUIType::Menu);
 
 			// 씬이 없다면 종료
 			if (!scene_stack.empty()) {
 				scene_stack.back()->SetUI();
+				scene_stack.back()->SetMenu();
 			}
 			else {
 				is_running = false;

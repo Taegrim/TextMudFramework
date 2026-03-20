@@ -8,23 +8,24 @@ void TitleScene::Init()
     UIManager::GetInstance().SetVisible(GlobalUIType::Log, false);
 
     SetUI();
+    SetMenu();
 }
 
 void TitleScene::SetUI()
 {
-    UIManager::GetInstance().AddMessage(GlobalUIType::Message, "1. 게임 시작   2. 게임 종료");
-    UIManager::GetInstance().AddMessage(GlobalUIType::Message, "원하는 메뉴의 번호를 입력하세요: ");
+}
+
+void TitleScene::SetMenu()
+{
+    UIManager::GetInstance().ClearMessage(GlobalUIType::Menu);
+    UIManager::GetInstance().AddMessage(GlobalUIType::Menu, "1. 게임 시작   2. 게임 종료");
+    UIManager::GetInstance().AddMessage(GlobalUIType::Menu, "원하는 메뉴의 번호를 입력하세요: ");
 }
 
 void TitleScene::ProcessEvent(const Event& e)
 {
     if (e.type == EventType::KeyDown) {
-
-        // 메세지 창 전부 비우기
-        UIManager::GetInstance().ClearMessage(GlobalUIType::Message);
-
-        // 고정 문구 적기
-        SetUI();
+        SetMenu();
 
         switch (e.key_code) {
         case '1':
@@ -40,7 +41,7 @@ void TitleScene::ProcessEvent(const Event& e)
         }
 
         default:
-            UIManager::GetInstance().AddMessage(GlobalUIType::Message, "잘못 입력하셨습니다. 다시 입력해주세요.");
+            UIManager::GetInstance().AddMessage(GlobalUIType::Menu, "잘못 입력하셨습니다. 다시 입력해주세요.");
             break;
         }
     }

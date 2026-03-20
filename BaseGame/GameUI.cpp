@@ -11,7 +11,7 @@ void ScreenUI::Render()
 
     // 임시 내용
     for (int i = 0; i < messages.size(); ++i) {
-        RenderSystem::GetInstance().PrintText(start_x + 2, start_y + 7 + i, messages[i]);
+        RenderSystem::GetInstance().PrintText(start_x + 2, start_y + 2 + i, messages[i]);
     }
 
     // 하단 테두리

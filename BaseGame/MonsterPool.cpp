@@ -11,6 +11,8 @@ MonsterPool::~MonsterPool()
 
 void MonsterPool::Init(int capacity)
 {
+	pool.reserve(capacity);
+
 	for (int i = 0; i < capacity; ++i) {
 		pool.push_back(std::make_unique<Monster>());
 	}

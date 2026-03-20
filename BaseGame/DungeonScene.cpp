@@ -8,6 +8,7 @@ void DungeonScene::Init()
     ui_list[static_cast<int>(SceneUIType::Minimap)] = std::make_unique<MinimapUI>(2, 2, 5);
 
     SetUI();
+    SetMenu();
 }
 
 void DungeonScene::SetUI()
@@ -20,17 +21,31 @@ void DungeonScene::SetUI()
         minimap->AddMessage("#######");
     }
 
-    UIManager::GetInstance().AddMessage(GlobalUIType::Message, "1. 내부 탐색 (몬스터 조우)   2. 마을로 도망친다");
-    UIManager::GetInstance().AddMessage(GlobalUIType::Message, "어떤 행동을 하시겠습니까?: ");
+    auto screen = GetLocalUI(SceneUIType::Screen);
+    if (screen) {
+        screen->Clear();
+        screen->AddMessage("");
+        screen->AddMessage("");
+        screen->AddMessage("");
+        screen->AddMessage("");
+        screen->AddMessage("");
+        screen->AddMessage("=============================");
+        screen->AddMessage("[ 음산한 기운이 감도는 던전 ]");
+        screen->AddMessage("=============================");
+    }
+}
+
+void DungeonScene::SetMenu()
+{
+    UIManager::GetInstance().ClearMessage(GlobalUIType::Menu);
+    UIManager::GetInstance().AddMessage(GlobalUIType::Menu, "1. 내부 탐색 (몬스터 조우)   2. 마을로 귀환한다  3. 미니맵 on/off");
+    UIManager::GetInstance().AddMessage(GlobalUIType::Menu, "어떤 행동을 하시겠습니까?: ");
 }
 
 void DungeonScene::ProcessEvent(const Event& e)
 {
     if (e.type == EventType::KeyDown) {
-        UIManager::GetInstance().ClearMessage(GlobalUIType::Message);
-
-        UIManager::GetInstance().AddMessage(GlobalUIType::Message, "1. 내부 탐색 (몬스터 조우)   2. 마을로 도망친다");
-        UIManager::GetInstance().AddMessage(GlobalUIType::Message, "어떤 행동을 하시겠습니까?: ");
+        SetMenu();
 
         switch (e.key_code) {
         case '1':
@@ -53,7 +68,7 @@ void DungeonScene::ProcessEvent(const Event& e)
         }
 
         default:
-            UIManager::GetInstance().AddMessage(GlobalUIType::Message, "잘못된 입력입니다.");
+            UIManager::GetInstance().AddMessage(GlobalUIType::Menu, "잘못된 입력입니다.");
             break;
         }
     }
@@ -65,9 +80,7 @@ void DungeonScene::Update(float delta_time)
 
 void DungeonScene::Render()
 {
-    RenderSystem::GetInstance().PrintText(4, 9, "=============================");
-    RenderSystem::GetInstance().PrintText(4, 10, "[ 음산한 기운이 감도는 던전 ]");
-    RenderSystem::GetInstance().PrintText(4, 11, "=============================");
+    
 }
 
 void DungeonScene::Release()

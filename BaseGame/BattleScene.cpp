@@ -10,6 +10,7 @@
 void BattleScene::Init()
 {
     ui_list[static_cast<int>(SceneUIType::Screen)] = std::make_unique<ScreenUI>(2, 1, 15);
+    ui_list[static_cast<int>(SceneUIType::CharacterInfo)] = std::make_unique<CharacterUI>(45, 1, 4);
     bm = GameManager::GetInstance().GetBattleManager();
 
     // 1~3 마리의 몬스터와 전투
@@ -32,16 +33,51 @@ void BattleScene::Init()
     current_state = BattleState::Act;
 
     SetUI();
+    SetMenu();
 }
 
 void BattleScene::SetUI()
 {
-    UIManager::GetInstance().ClearMessage(GlobalUIType::Message);
+    // 플레이어 체력 표시
+    auto info = GetLocalUI(SceneUIType::CharacterInfo);
+    if (info) {
+        info->Clear();
+
+        std::string hp_text = "HP: " + std::to_string(player->GetHp()) +
+            " / " + std::to_string(player->GetStatus()[StatusType::MaxHp]);
+        info->AddMessage(std::string(player->GetName()) + "의 상태");
+        info->AddMessage(hp_text);
+    }
+
+    auto screen = GetLocalUI(SceneUIType::Screen);
+    if (screen) {
+        screen->Clear();
+
+        screen->AddMessage("=================================");
+        screen->AddMessage("         [ 적 군 진 영 ]         ");
+        
+        for (int i = 0; i < monster_list.size(); ++i) {
+            Monster* monster = monster_list[i];
+
+            if (monster && monster->IsVisible() && !monster->IsDead()) {
+                std::string hp_info = "[" + std::to_string(i + 1) + "] " + std::string(monster->GetName()) +
+                    " HP: " + std::to_string(monster->GetHp()) + " / " + std::to_string(monster->GetStatus()[StatusType::MaxHp]);
+
+                screen->AddMessage(hp_info);
+            }
+        }
+        screen->AddMessage("=================================");
+    }
+}
+
+void BattleScene::SetMenu()
+{
+    UIManager::GetInstance().ClearMessage(GlobalUIType::Menu);
 
     switch (current_state) {
     case BattleState::Act:
-        UIManager::GetInstance().AddMessage(GlobalUIType::Message, "1. 공격한다   2. 도망친다");
-        UIManager::GetInstance().AddMessage(GlobalUIType::Message, "전투 행동을 선택하세요: ");
+        UIManager::GetInstance().AddMessage(GlobalUIType::Menu, "1. 공격한다   2. 도망친다");
+        UIManager::GetInstance().AddMessage(GlobalUIType::Menu, "전투 행동을 선택하세요: ");
         break;
 
     case BattleState::TargetEnemy:
@@ -54,8 +90,8 @@ void BattleScene::SetUI()
         }
         msg += "0. 취소";
 
-        UIManager::GetInstance().AddMessage(GlobalUIType::Message, msg);
-        UIManager::GetInstance().AddMessage(GlobalUIType::Message, "공격할 대상을 선택하세요: ");
+        UIManager::GetInstance().AddMessage(GlobalUIType::Menu, msg);
+        UIManager::GetInstance().AddMessage(GlobalUIType::Menu, "공격할 대상을 선택하세요: ");
         break;
     }
 
@@ -68,8 +104,6 @@ void BattleScene::SetUI()
 void BattleScene::ProcessEvent(const Event& e)
 {
     if (e.type == EventType::KeyDown) {
-        UIManager::GetInstance().ClearMessage(GlobalUIType::Message);
-
         switch(current_state){
             // 행동 선택
         case BattleState::Act:
@@ -123,6 +157,7 @@ void BattleScene::ProcessEvent(const Event& e)
                 }
                 else {  // 계속 전투중, 행동 선택지로 돌아감
                     current_state = BattleState::Act;
+                    SetUI();
                 }
             }
 
@@ -136,7 +171,7 @@ void BattleScene::ProcessEvent(const Event& e)
 
         }
 
-        SetUI();
+        SetMenu();
     }
 }
 
@@ -146,22 +181,7 @@ void BattleScene::Update(float delta_time)
 
 void BattleScene::Render()
 {
-    int offset = 8;
-    RenderSystem::GetInstance().PrintText(4, offset++, "=================================");
-    RenderSystem::GetInstance().PrintText(4, offset++, "         [ 적 군 진 영 ]         ");
-    
 
-    for (int i = 0; i < monster_list.size(); ++i) {
-        Monster* monster = monster_list[i];
-
-        if (monster && monster->IsVisible() && !monster->IsDead()) {
-            std::string hp_info = "[" + std::to_string(i + 1) + "] " + std::string(monster->GetName()) +
-                " HP: " + std::to_string(monster->GetHp()) + " / " + std::to_string(monster->GetStatus()[StatusType::MaxHp]);
-
-            RenderSystem::GetInstance().PrintText(4, offset++, hp_info);
-        }
-    }
-    RenderSystem::GetInstance().PrintText(4, offset, "=============================");
 }
 
 void BattleScene::Release()

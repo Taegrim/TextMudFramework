@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "Status.h"
 #include "UIManager.h"
+#include "Item.h"
 
 void TownScene::Init()
 {
@@ -11,23 +12,28 @@ void TownScene::Init()
     ui_list[static_cast<int>(SceneUIType::CharacterInfo)] = std::make_unique<CharacterUI>(30, 1, 7);
 
     SetUI();
+    SetMenu();
 }
 
 void TownScene::SetUI()
 {
     // Character UI에 플레이어의 스탯을 출력
-    std::string hp_text = "HP: " + std::to_string(player->GetStatus()[StatusType::Hp]) +
-        " / " + std::to_string(player->GetStatus()[StatusType::MaxHp]);
+    auto info = GetLocalUI(SceneUIType::CharacterInfo);
+    if (info) {
+        info->Clear();
 
-    std::string level_text = "Lv : " + std::to_string(player->GetLevel());
-    std::string exp_text = "EXP : " + std::to_string(player->GetExp());
-    std::string gold_text = "GOLD : " + std::to_string(player->GetGold());
+        std::string hp_text = "HP: " + std::to_string(player->GetHp()) +
+            " / " + std::to_string(player->GetStatus()[StatusType::MaxHp]);
+        std::string level_text = "Lv : " + std::to_string(player->GetLevel());
+        std::string exp_text = "EXP : " + std::to_string(player->GetExp());
+        std::string gold_text = "GOLD : " + std::to_string(player->GetGold());
 
-    ui_list[static_cast<int>(SceneUIType::CharacterInfo)]->AddMessage(std::string(player->GetName()) + "의 상태");
-    ui_list[static_cast<int>(SceneUIType::CharacterInfo)]->AddMessage(hp_text);
-    ui_list[static_cast<int>(SceneUIType::CharacterInfo)]->AddMessage(level_text);
-    ui_list[static_cast<int>(SceneUIType::CharacterInfo)]->AddMessage(exp_text);
-    ui_list[static_cast<int>(SceneUIType::CharacterInfo)]->AddMessage(gold_text);
+        info->AddMessage(std::string(player->GetName()) + "의 상태");
+        info->AddMessage(hp_text);
+        info->AddMessage(level_text);
+        info->AddMessage(exp_text);
+        info->AddMessage(gold_text);
+    }
 
     
     auto screen = GetLocalUI(SceneUIType::Screen);
@@ -37,20 +43,19 @@ void TownScene::SetUI()
         screen->AddMessage("#      평화로운 마을      #");
         screen->AddMessage("###########################");
     }
+}
 
-
-    // Global UI
-    UIManager::GetInstance().AddMessage(GlobalUIType::Message, "1. 여관에서 휴식  2. 던전으로 이동");
-    UIManager::GetInstance().AddMessage(GlobalUIType::Message, "원하는 행동을 선택하세요: ");
+void TownScene::SetMenu()
+{
+    UIManager::GetInstance().ClearMessage(GlobalUIType::Menu); // 메뉴 비우기
+    UIManager::GetInstance().AddMessage(GlobalUIType::Menu, "1. 여관에서 휴식  2. 던전으로  3. 상태창  4. [테스트] 장비 토글");
+    UIManager::GetInstance().AddMessage(GlobalUIType::Menu, "원하는 행동을 선택하세요: ");
 }
 
 void TownScene::ProcessEvent(const Event& e)
 {
     if (e.type == EventType::KeyDown) {
-        UIManager::GetInstance().ClearMessage(GlobalUIType::Message); // 메세지 삭제
-
-        UIManager::GetInstance().AddMessage(GlobalUIType::Message, "1. 여관에서 휴식  2. 던전으로 이동");
-        UIManager::GetInstance().AddMessage(GlobalUIType::Message, "원하는 행동을 선택하세요: ");
+        SetMenu();
 
         switch (e.key_code) {
         case '1':
@@ -72,9 +77,37 @@ void TownScene::ProcessEvent(const Event& e)
             }
             break;
         }
+        
+        case '4':
+        {
+            Equipment* weapon = player->GetEquippedItem(EquipmentSlot::Weapon);
+
+            if (weapon) {
+                weapon->Use(player);
+            }
+            else {
+                // 인벤토리 비어있다면 생성
+                if (player->GetInventory().empty()) {
+                    auto test_sword = std::make_unique<Equipment>("녹슨검", "테스트용", 0, EquipmentSlot::Weapon);
+
+                    test_sword->SetBonusStat({
+                        {StatusType::Atk, 6},
+                        {StatusType::MaxHp, 50}
+                        });
+
+                    player->AddItem(std::move(test_sword));
+                }
+
+                Item* item = player->GetInventory()[0].get();
+                item->Use(player);
+            }
+
+            SetUI();
+            break;
+        }
 
         default:
-            UIManager::GetInstance().AddMessage(GlobalUIType::Message, "잘못된 입력입니다.");
+            UIManager::GetInstance().AddMessage(GlobalUIType::Menu, "잘못된 입력입니다.");
             break;
         }
     }

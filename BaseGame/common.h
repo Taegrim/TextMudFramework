@@ -5,6 +5,7 @@
 #include <array>	// 컨테이너
 #include <vector>	// 컨테이너
 #include <queue>	// 컨테이너
+#include <unordered_map>	// 컨테이너
 #include <algorithm>
 #include <memory>		// 스마트 포인터
 #include <string_view>
@@ -30,7 +31,7 @@ namespace RandomUtil {
 
 enum class GlobalUIType {
 	Log,
-	Message,
+	Menu,
 	COUNT
 };
 
@@ -56,6 +57,8 @@ enum class SceneType {
 	Town,
 	Dungeon,
 	Battle,
+	Inventory,
+	Shop,
 	None
 };
 
@@ -76,4 +79,19 @@ enum class MonsterType {
 	Slime,
 	Goblin,
 	None
+};
+
+enum class ItemType {
+	Equipment,
+	Potion,
+	Junk,
+	None
+};
+
+enum class EquipmentSlot {
+	Weapon,
+	Armor,
+	Accessory1,
+	Accessory2,
+	COUNT
 };

@@ -17,7 +17,7 @@
 * **마이어스 싱글톤의 이점 :**
   정적 변수를 `GetInstance()` 함수 내부의 지역 변수로 선언하면, 프로그램 시작 시점이 아니라 **해당 함수가 최초로 호출될 때 초기화**되므로 초기화 순서 꼬임 문제가 완벽하게 해결됩니다.
 
-````
+```cpp
 class UIManager 
 {
 public:
@@ -37,12 +37,11 @@ public:
 private:
     // 멤버 변수
 
-
     // 외부에서 new 못하도록 차단
     UIManager();
     ~UIManager();
 };
-````
+```
 
 ---
 <br>
@@ -70,7 +69,7 @@ private:
 2. **고정 스텝 업데이트:** 로직(로테이션, 이동, 쿨타임 등)은 기기 성능에 상관없이 **1/60초(약 16.66ms)** 마다 일정하게 수행되도록 합니다.
 3. **조건부 렌더링:** `Update`가 수행되어 **상태에 변화가 생겼을 때만 렌더링**을 수행합니다. 변화가 없다면 이전 프레임 화면을 유지해도 되기 때문입니다.
 
-```
+```cpp
 void GameManager::Run()
 {
 	// 60fps -> 1프레임당 약16.66ms
@@ -141,7 +140,7 @@ void GameManager::Run()
 * **이유:** 기존 파이프라인(`이벤트 처리 -> Update -> Render`) 도중 이벤트 단계에서 씬을 갈아끼우면, 새로 태어난 씬이 초기화되자마자 불완전한 델타 타임(Delta Time)으로 `Update`를 맞게 되는 논리적 오류가 발생할 수 있습니다.
 * **결론:** 따라서 씬 전환 이벤트는 예약 처리만 해두고, **루프의 모든 로직(`Event`, `Update`)이 완전히 끝난 후 가장 안전한 타이밍에 씬 전환을 수행**하는 것이 바람직합니다.
 
-```
+```cpp
 while (!event_queue.empty()) {
 	Event ev = event_queue.front();
 	event_queue.pop();
@@ -156,7 +155,7 @@ while (!event_queue.empty()) {
 	}
 }
 ```
-```
+```cpp
 void GameManager::ChangeScene()
 {
 	// 기존 씬 제거
@@ -184,7 +183,7 @@ void GameManager::ChangeScene()
 	}
 }
 ```
-```
+```cpp
 void GameManager::Run()
 {
 	// 시간 계산...
