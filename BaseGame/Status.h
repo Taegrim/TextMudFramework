@@ -20,7 +20,7 @@ public:
 
 
 	// 스탯 관련 로직
-	int TakeDamage(int dmg);
+	int TakeDamage(int dmg);	// 데미지 처리
 	bool IsDead() const;
 	void Heal(int amount);
 	void MaxHeal();

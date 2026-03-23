@@ -95,3 +95,9 @@ enum class EquipmentSlot {
 	Accessory2,
 	COUNT
 };
+
+struct DropEntry {
+	int rate;
+	int item_id;
+};
+using DropTable = std::vector<DropEntry>;

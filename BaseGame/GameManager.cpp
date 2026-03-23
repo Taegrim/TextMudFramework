@@ -8,6 +8,7 @@
 #include "RenderSystem.h"
 #include "BattleManager.h"
 #include "MonsterPool.h"
+#include "ItemManager.h"
 
 GameManager::GameManager() : scene_stack(), scene_op(SceneOp::None),
 	next_scene(SceneType::None), is_running(true)
@@ -22,8 +23,11 @@ void GameManager::Init()
 {
 	UIManager::GetInstance().SetAllVisible(true);
 
+	// 몬스터 드롭 테이블 초기화
+	ItemManager::GetInstance().Init();
+
 	// 플레이어 생성
-	player = std::make_unique<Player>("용사", "@", Status(100, 100, 10, 10, 50, 30));
+	player = std::make_unique<Player>("용사", "@", Status(100, 100, 10, 10, 20, 30));
 
 	// 전투 매니저 생성
 	battle_manager = std::make_unique<BattleManager>(player.get());
@@ -118,7 +122,7 @@ void GameManager::Run()
 			
 			// 최상단 스택부터 검사해서 불투명한 씬을 찾고 찾았다면 break
 			int idx = 0;
-			for (int i = scene_stack.size() - 1; i >= 0; --i) {
+			for (int i = static_cast<int>(scene_stack.size()) - 1; i >= 0; --i) {
 				if (scene_stack[i]->IsOpaque()) {
 					idx = i;
 					break;

@@ -135,6 +135,7 @@
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameUI.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ItemManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="MonsterPool.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameUI.h" />
     <ClInclude Include="Item.h" />
+    <ClInclude Include="ItemManager.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="MonsterPool.h" />
     <ClInclude Include="NPC.h" />

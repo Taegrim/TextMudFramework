@@ -1,5 +1,9 @@
 #include "Status.h"
 
+// 데미지 난수 범위 90~110
+constexpr int MIN_RATE = 90;
+constexpr int MAX_RATE = 110;
+
 Status::Status()
 {
 	status.fill(0);
@@ -8,8 +12,12 @@ Status::Status()
 
 int Status::TakeDamage(int dmg)
 {
-	int total_damage = std::max(1, dmg - (*this)[StatusType::Def]);
-	
+	int base_damage = std::max(1, dmg - (*this)[StatusType::Def]);
+	int rate = RandomUtil::GetRange(MIN_RATE, MAX_RATE);
+
+	int total_damage = (base_damage * rate) / 100;
+	total_damage = std::max(1, total_damage);
+
 	status[static_cast<int>(StatusType::Hp)] -= total_damage;
 	if (status[static_cast<int>(StatusType::Hp)] <= 0) {
 		status[static_cast<int>(StatusType::Hp)] = 0;

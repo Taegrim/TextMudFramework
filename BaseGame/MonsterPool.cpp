@@ -1,5 +1,6 @@
 #include "MonsterPool.h"
-#include <random>
+#include "Item.h"
+#include "ItemManager.h"
 
 MonsterPool::MonsterPool()
 {
@@ -44,12 +45,15 @@ Monster* MonsterPool::SpawnMonster(MonsterType type)
 		return monster;
 	}
 
+	auto& item_manager = ItemManager::GetInstance();
 	switch (type) {
 	case MonsterType::Slime:
 		monster->Spawn("슬라임", "S", Status(30, 30, 0, 0, 5, 2), 10, 5);
+		monster->SetDropTable(item_manager.GetDropTable("슬라임"));
 		break;
 	case MonsterType::Goblin:
 		monster->Spawn("고블린", "G", Status(50, 50, 0, 0, 12, 5), 25, 15);
+		monster->SetDropTable(item_manager.GetDropTable("고블린"));
 		break;
 	default:
 		return nullptr;

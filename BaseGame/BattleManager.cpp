@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Monster.h"
 #include "UIManager.h"
+#include "Item.h"
 
 
 BattleManager::BattleManager(Player* p) : player(p)
@@ -15,6 +16,7 @@ void BattleManager::StartBattle(const std::vector<Monster*>& monsters)
 	// 전투 초기화
 	total_exp = 0;
 	total_gold = 0;
+	items.clear();
 }
 
 void BattleManager::PlayerAttack(int target_idx)
@@ -46,8 +48,16 @@ void BattleManager::PlayerAttack(int target_idx)
 		UIManager::GetInstance().AddMessage(GlobalUIType::Log,
 			"[처치] " + std::string(monster->GetName()) + "을(를) 처치했습니다!");
 
+		// 경험치와 골드를 저장해둠, 전투가 아예 끝날때만 지급
 		total_exp += monster->GetRewardExp();
 		total_gold += monster->GetRewardGold();
+
+		// 드롭 테이블 처리
+		auto drops = monster->CheckDrops();
+		for (auto& item : drops) {
+			items.push_back(std::move(item));
+		}
+
 		monster->SetVisible(false);
 	}
 }
@@ -106,6 +116,11 @@ void BattleManager::DistributeReward()
 
 	UIManager::GetInstance().AddMessage(GlobalUIType::Log,
 		"[보상] 경험치를 " + std::to_string(total_exp) + ", 골드를 " + std::to_string(total_gold) + "획득하였습니다!");
+
+	for (auto& item : items) {
+		player->AddItem(std::move(item));
+	}
+	items.clear();
 }
 
 int BattleManager::GetTotalExp() const
