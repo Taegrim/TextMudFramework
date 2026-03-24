@@ -6,7 +6,7 @@ Monster::Monster() : BattleEntity("None", " ", Status()), reward_gold(0), reward
 	is_visible = false;
 }
 
-Monster::Monster(std::string_view name, std::string_view img, const Status& stat, int gold, int exp) :
+Monster::Monster(std::string_view name, std::string_view img, const Status& stat, unsigned int gold, unsigned int exp) :
 	BattleEntity(name, img, stat), reward_gold(gold), reward_exp(exp)
 {
 }
@@ -20,7 +20,7 @@ void Monster::Render()
 	// 렌더링
 }
 
-void Monster::Spawn(std::string_view name, std::string_view img, const Status& stat, int gold, int exp)
+void Monster::Spawn(std::string_view name, std::string_view img, const Status& stat, unsigned int gold, unsigned int exp)
 {
 	this->name = name;
 	this->image = img;
@@ -29,6 +29,7 @@ void Monster::Spawn(std::string_view name, std::string_view img, const Status& s
 	this->reward_exp = exp;
 	this->is_visible = true;
 
+	// 드롭 테이블 없는 몬스터도 있을 수 있음
 	drop_table = nullptr;
 }
 
@@ -56,12 +57,12 @@ std::vector<std::unique_ptr<Item>> Monster::CheckDrops() const
 	return items;
 }
 
-int Monster::GetRewardExp() const
+unsigned int Monster::GetRewardExp() const
 {
 	return reward_exp;
 }
 
-int Monster::GetRewardGold() const
+unsigned int Monster::GetRewardGold() const
 {
 	return reward_gold;
 }

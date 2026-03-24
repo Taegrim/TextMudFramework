@@ -29,9 +29,9 @@ std::unique_ptr<Item> ItemManager::CreateItem(int item_id)
     }
 }
 
-const DropTable* ItemManager::GetDropTable(std::string_view name) const
+const DropTable* ItemManager::GetDropTable(const std::string& name) const
 {
-    auto it = drop_tables.find(std::string(name));
+    auto it = drop_tables.find(name);
     if (it != drop_tables.end()) {
         return &it->second;
     }

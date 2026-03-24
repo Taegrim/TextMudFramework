@@ -16,8 +16,8 @@ public:
 	void MaxHeal();
 	
 	// 아이템
-	void AddItem(std::unique_ptr<Item> item);
-	void RemoveItem(int index);
+	void AddItem(std::unique_ptr<Item> new_item);
+	void RemoveItem(size_t index);
 	const std::vector<std::unique_ptr<Item>>& GetInventory() const;
 
 	// 장비
@@ -26,22 +26,22 @@ public:
 	Equipment* GetEquippedItem(EquipmentSlot slot) const;
 
 	// 경험치, 골드
-	void GainExp(int amount);
-	void GainGold(int amount);
-	void SpendGold(int amount);
+	void GainExp(unsigned int amount);
+	void GainGold(unsigned int amount);
+	void SpendGold(unsigned int amount);
 
-	int GetLevel() const;
-	int GetExp() const;
-	int GetGold() const;
+	unsigned int GetLevel() const;
+	unsigned int GetExp() const;
+	unsigned int GetGold() const;
 	int GetHp() const;
 
 private:
-	int level = 1;
-	int exp = 0;
-	int gold = 0;
+	unsigned int level = 1;
+	unsigned int exp = 0;
+	unsigned int gold = 0;
 	std::vector<std::unique_ptr<Item>> inventory;	// 인벤토리 가방
 	std::array<Equipment*, static_cast<int>(EquipmentSlot::COUNT)> equipment_slots;	// 장비슬롯
 
-	int GetRequiredExp() const;
+	unsigned int GetRequiredExp() const;
 };
 

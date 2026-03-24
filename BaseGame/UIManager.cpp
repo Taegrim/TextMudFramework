@@ -17,25 +17,25 @@ UIManager::~UIManager()
 
 void UIManager::AddMessage(GlobalUIType type, std::string_view msg)
 {
-    int idx = static_cast<int>(type);
+    size_t idx = static_cast<size_t>(type);
 
-    if (idx >= 0 && idx < static_cast<int>(GlobalUIType::COUNT)) {
+    if (idx < static_cast<size_t>(GlobalUIType::COUNT)) {
         ui_list[idx]->AddMessage(msg);
     }
 }
 
 void UIManager::ClearMessage(GlobalUIType type)
 {
-    int idx = static_cast<int>(type);
+    size_t idx = static_cast<size_t>(type);
 
-    if (idx >= 0 && idx < static_cast<int>(GlobalUIType::COUNT)) {
+    if (idx < static_cast<size_t>(GlobalUIType::COUNT)) {
         ui_list[idx]->Clear();
     }
 }
 
 void UIManager::ClearAll(const std::vector<GlobalUIType>& ignore_list)
 {
-    for (int i = 0; i < static_cast<int>(GlobalUIType::COUNT); ++i) {
+    for (size_t i = 0; i < static_cast<size_t>(GlobalUIType::COUNT); ++i) {
         GlobalUIType current_type = static_cast<GlobalUIType>(i);
 
         auto it = std::find(ignore_list.begin(), ignore_list.end(), current_type);
@@ -59,8 +59,8 @@ void UIManager::Render()
 
 void UIManager::SetVisible(GlobalUIType type, bool value)
 {
-    int idx = static_cast<int>(type);
-    if (idx >= 0 && idx < static_cast<int>(GlobalUIType::COUNT)) {
+    size_t idx = static_cast<size_t>(type);
+    if (idx < static_cast<size_t>(GlobalUIType::COUNT)) {
         ui_list[idx]->SetVisible(value);
     }
 }

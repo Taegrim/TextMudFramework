@@ -23,21 +23,47 @@ void Player::MaxHeal()
 	status.MaxHeal();
 }
 
-void Player::AddItem(std::unique_ptr<Item> item)
+void Player::AddItem(std::unique_ptr<Item> new_item)
 {
-	if (!item) {
+	if (!new_item) {
 		return;
 	}
 
-	UIManager::GetInstance().AddMessage(GlobalUIType::Log,
-		"[획득] " + std::string(item->GetName()) + "을(를) 획득했습니다.");
+	// 중첩 가능한 아이템이라면
+	if (new_item->GetMaxStack() > 1) {
+		for (auto& item : inventory) {
+			if (item->GetName() == new_item->GetName()) {
 
-	inventory.push_back(std::move(item));
+				// 여유공간이 있다면
+				int capacity = item->GetMaxStack() - item->GetStackCount();
+				if (capacity > 0) {
+					
+					int amount = new_item->GetStackCount();
+
+					// 여유공간이 충분하면 채우고 리턴
+					if (capacity >= amount) {
+						item->AddStackCount(amount);
+						return;
+					}
+					else {	// 모자라다면 전부 채우고 새로운 아이템의 개수 차감
+						item->AddStackCount(capacity);
+						new_item->AddStackCount(-capacity);
+					}
+				}
+			}
+		}
+	}
+
+	// 같은 아이템 없거나 기존 아이템을 채우고 남은경우 빈칸에 추가
+	inventory.push_back(std::move(new_item));
+
+	UIManager::GetInstance().AddMessage(GlobalUIType::Log,
+		"[획득] " + std::string(inventory.back()->GetName()) + "을(를) 획득했습니다.");
 }
 
-void Player::RemoveItem(int index)
+void Player::RemoveItem(size_t index)
 {
-	if (index < 0 || index >= inventory.size()) {
+	if (index >= inventory.size()) {
 		return;
 	}
 
@@ -50,9 +76,6 @@ void Player::RemoveItem(int index)
 			UnEquip(e->GetSlot());
 		}
 	}
-
-	UIManager::GetInstance().AddMessage(GlobalUIType::Log,
-		"[버림] " + std::string(item->GetName()) + "을(를) 버렸습니다.");
 
 	inventory.erase(inventory.begin() + index);
 }
@@ -130,7 +153,7 @@ Equipment* Player::GetEquippedItem(EquipmentSlot slot) const
 	return equipment_slots[static_cast<int>(slot)];
 }
 
-void Player::GainExp(int amount)
+void Player::GainExp(unsigned int amount)
 {
 	exp += amount;
 
@@ -150,27 +173,27 @@ void Player::GainExp(int amount)
 	}
 }
 
-void Player::GainGold(int amount)
+void Player::GainGold(unsigned int amount)
 {
 	gold += amount;
 }
 
-void Player::SpendGold(int amount)
+void Player::SpendGold(unsigned int amount)
 {
 	gold -= amount;
 }
 
-int Player::GetLevel() const
+unsigned int Player::GetLevel() const
 {
 	return level;
 }
 
-int Player::GetExp() const
+unsigned int Player::GetExp() const
 {
 	return exp;
 }
 
-int Player::GetGold() const
+unsigned int Player::GetGold() const
 {
 	return gold;
 }
@@ -182,7 +205,7 @@ int Player::GetHp() const
 
 // private 함수
 // 경험치 요구랑
-int Player::GetRequiredExp() const
+unsigned int Player::GetRequiredExp() const
 {
-	return level * 50;
+	return level * 50u;
 }

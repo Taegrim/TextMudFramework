@@ -4,8 +4,8 @@
 
 void DungeonScene::Init()
 {
-    ui_list[static_cast<int>(SceneUIType::Screen)] = std::make_unique<ScreenUI>(2, 1, 15);
-    ui_list[static_cast<int>(SceneUIType::Minimap)] = std::make_unique<MinimapUI>(2, 2, 5);
+    ui_list[static_cast<size_t>(SceneUIType::Screen)] = std::make_unique<ScreenUI>(2, 1, 15);
+    ui_list[static_cast<size_t>(SceneUIType::Minimap)] = std::make_unique<MinimapUI>(2, 2, 5);
 
     SetUI();
     SetMenu();
@@ -66,6 +66,11 @@ void DungeonScene::ProcessEvent(const Event& e)
             }
             break;
         }
+
+        case 'i':
+        case 'I':
+            PushScene(SceneType::Inventory);
+            break;
 
         default:
             UIManager::GetInstance().AddMessage(GlobalUIType::Menu, "잘못된 입력입니다.");

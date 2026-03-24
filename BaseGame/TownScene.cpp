@@ -8,8 +8,8 @@
 
 void TownScene::Init()
 {
-    ui_list[static_cast<int>(SceneUIType::Screen)] = std::make_unique<ScreenUI>(2, 1, 15);
-    ui_list[static_cast<int>(SceneUIType::CharacterInfo)] = std::make_unique<CharacterUI>(30, 1, 7);
+    ui_list[static_cast<size_t>(SceneUIType::Screen)] = std::make_unique<ScreenUI>(2, 1, 15);
+    ui_list[static_cast<size_t>(SceneUIType::CharacterInfo)] = std::make_unique<CharacterUI>(30, 1, 7);
 
     SetUI();
     SetMenu();
@@ -59,8 +59,8 @@ void TownScene::ProcessEvent(const Event& e)
 
         switch (e.key_code) {
         case '1':
-            UIManager::GetInstance().AddMessage(GlobalUIType::Log, "[휴식] 여관에서 푹 쉬었습니다. (HP 회복)");
             player->MaxHeal();
+            UIManager::GetInstance().AddMessage(GlobalUIType::Log, "[휴식] 여관에서 푹 쉬었습니다. (HP 회복)");
             SetUI();
             break;
 
@@ -105,6 +105,11 @@ void TownScene::ProcessEvent(const Event& e)
             SetUI();
             break;
         }
+
+        case 'i':
+        case 'I':
+            PushScene(SceneType::Inventory);
+            break;
 
         default:
             UIManager::GetInstance().AddMessage(GlobalUIType::Menu, "잘못된 입력입니다.");

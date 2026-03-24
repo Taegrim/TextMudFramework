@@ -56,5 +56,5 @@ void RenderSystem::PrintText(int x, int y, std::string_view sv)
 
     // Back Buffer에 문자열 출력
     WriteConsoleA(screen_buffers[current_buffer_idx],
-        sv.data(), (DWORD)sv.length(), &dwCharsWritten, NULL);
+        sv.data(), static_cast<DWORD>(sv.length()), &dwCharsWritten, NULL);
 }

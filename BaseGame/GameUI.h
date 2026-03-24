@@ -4,7 +4,7 @@
 class ScreenUI : public BaseUI
 {
 public:
-	ScreenUI(int x, int y, int lines) : BaseUI(x, y, lines) { max_messages = lines - 3; }
+	ScreenUI(int x, int y, unsigned int lines);
 
 	void Render() override;
 };
@@ -13,7 +13,7 @@ public:
 class MessageUI : public BaseUI
 {
 public:
-	MessageUI(int x, int y, int lines) : BaseUI(x, y, lines) { max_messages = lines - 1; }
+	MessageUI(int x, int y, unsigned int lines);
 
 	void Render() override;
 };
@@ -22,7 +22,7 @@ public:
 class LogUI : public BaseUI
 {
 public:
-	LogUI(int x, int y, int lines) : BaseUI(x, y, lines) { max_messages = lines - 1; }
+	LogUI(int x, int y, unsigned int lines);
 
 	void Render() override;
 };
@@ -31,7 +31,7 @@ public:
 class MinimapUI : public BaseUI
 {
 public:
-	MinimapUI(int x, int y, int lines) : BaseUI(x, y, lines) { max_messages = lines - 3; }
+	MinimapUI(int x, int y, unsigned int lines);
 
 	void Render() override;
 };
@@ -40,7 +40,7 @@ public:
 class CharacterUI : public BaseUI
 {
 public:
-	CharacterUI(int x, int y, int lines) : BaseUI(x, y, lines) { max_messages = lines - 2; }
+	CharacterUI(int x, int y, unsigned int lines);
 
 	void Render() override;
 };

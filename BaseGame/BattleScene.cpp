@@ -6,11 +6,12 @@
 #include "Monster.h"
 #include "Player.h"
 #include "BattleManager.h"
+#include "InventoryScene.h"
 
 void BattleScene::Init()
 {
-    ui_list[static_cast<int>(SceneUIType::Screen)] = std::make_unique<ScreenUI>(2, 1, 15);
-    ui_list[static_cast<int>(SceneUIType::CharacterInfo)] = std::make_unique<CharacterUI>(45, 1, 4);
+    ui_list[static_cast<size_t>(SceneUIType::Screen)] = std::make_unique<ScreenUI>(2, 1, 15);
+    ui_list[static_cast<size_t>(SceneUIType::CharacterInfo)] = std::make_unique<CharacterUI>(45, 1, 4);
     bm = GameManager::GetInstance().GetBattleManager();
 
     // 1~3 마리의 몬스터와 전투
@@ -56,7 +57,7 @@ void BattleScene::SetUI()
         screen->AddMessage("=================================");
         screen->AddMessage("         [ 적 군 진 영 ]         ");
         
-        for (int i = 0; i < monster_list.size(); ++i) {
+        for (size_t i = 0; i < monster_list.size(); ++i) {
             Monster* monster = monster_list[i];
 
             if (monster && monster->IsVisible() && !monster->IsDead()) {
@@ -83,7 +84,7 @@ void BattleScene::SetMenu()
     case BattleState::TargetEnemy:
     {
         std::string msg;
-        for (int i = 0; i < monster_list.size(); ++i) {
+        for (size_t i = 0; i < monster_list.size(); ++i) {
             if (monster_list[i]->IsVisible() && !monster_list[i]->IsDead()) {
                 msg += std::to_string(i + 1) + ". " + std::string(monster_list[i]->GetName()) + "  ";
             }
@@ -117,6 +118,13 @@ void BattleScene::ProcessEvent(const Event& e)
                 PopScene(); // 도망 -> 이전 씬(던전)으로 복귀!
                 return;
 
+                // 행동 선택지 중에만 아이템 확인 가능
+            case 'i':
+            case 'I':
+                InventoryScene::next_start_tab = InventoryTab::Consumable;
+                PushScene(SceneType::Inventory);
+                break;
+
             default:
                 break;
             }
@@ -132,9 +140,11 @@ void BattleScene::ProcessEvent(const Event& e)
 
             int idx = e.key_code - '1';
 
-            if (idx >= 0 && idx < monster_list.size() && monster_list[idx]->IsVisible()) {
+            if (idx >= 0 && idx < static_cast<int>(monster_list.size()) &&
+                monster_list[idx]->IsVisible()) 
+            {
                 // 플레이어 공격
-                bm->PlayerAttack(idx);
+                bm->PlayerAttack(static_cast<size_t>(idx));
 
                 // 몬스터들의 공격
                 if (!bm->IsBattleOver()) {

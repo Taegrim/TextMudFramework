@@ -3,6 +3,7 @@
 #include "TownScene.h"
 #include "DungeonScene.h"
 #include "BattleScene.h"
+#include "InventoryScene.h"
 #include "Player.h"
 #include "UIManager.h"
 #include "RenderSystem.h"
@@ -130,7 +131,7 @@ void GameManager::Run()
 			}
 
 			// 불투명한 씬부터 렌더링, 이 아래는 어차피 안보이므로 그릴 필요 X
-			for (int i = idx; i < scene_stack.size(); ++i) {
+			for (size_t i = static_cast<size_t>(idx); i < scene_stack.size(); ++i) {
 				scene_stack[i]->Render();
 				scene_stack[i]->RenderUI();
 			}
@@ -254,6 +255,12 @@ std::unique_ptr<BaseScene> GameManager::CreateScene(SceneType type)
 	case SceneType::Battle:
 		return std::make_unique<BattleScene>();
 
+	case SceneType::Inventory:
+		return std::make_unique<InventoryScene>();
+
+	default:
+		assert(false && "씬 생성에 오류가 있습니다!");
+		return nullptr;
 	}
 	return nullptr;
 }

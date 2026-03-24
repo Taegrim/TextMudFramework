@@ -14,7 +14,7 @@ public:
 	MonsterPool(const MonsterPool&) = delete;
 	MonsterPool& operator=(const MonsterPool&) = delete;
 
-	void Init(int capacity = 20);
+	void Init(size_t capacity = 20);
 
 	Monster* SpawnRandomMonster();
 	Monster* SpawnMonster(MonsterType type);

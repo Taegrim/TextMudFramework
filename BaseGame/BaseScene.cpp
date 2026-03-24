@@ -18,9 +18,9 @@ void BaseScene::RenderUI()
 
 void BaseScene::AddLocalMessage(SceneUIType type, std::string_view msg)
 {
-	int idx = static_cast<int>(type);
+	size_t idx = static_cast<size_t>(type);
 
-	if (idx >= 0 && idx < static_cast<int>(SceneUIType::COUNT)) {
+	if (idx < static_cast<int>(SceneUIType::COUNT)) {
 		ui_list[idx]->AddMessage(msg);
 	}
 }
@@ -53,7 +53,12 @@ void BaseScene::PopScene()
 
 BaseUI* BaseScene::GetLocalUI(SceneUIType type)
 {
-	return ui_list[static_cast<int>(type)].get();
+	size_t idx = static_cast<size_t>(type);
+
+	if (idx < static_cast<size_t>(SceneUIType::COUNT)) {
+		return ui_list[idx].get();
+	}
+	return nullptr;
 }
 
 bool BaseScene::IsOpaque() const

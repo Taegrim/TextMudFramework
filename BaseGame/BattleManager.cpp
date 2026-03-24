@@ -19,7 +19,7 @@ void BattleManager::StartBattle(const std::vector<Monster*>& monsters)
 	items.clear();
 }
 
-void BattleManager::PlayerAttack(int target_idx)
+void BattleManager::PlayerAttack(size_t target_idx)
 {
 	// 플레이어 유효성 확인
 	if (!player || player->IsDead()) {
@@ -27,7 +27,7 @@ void BattleManager::PlayerAttack(int target_idx)
 	}
 
 	// 인덱스 유효성 확인
-	if (target_idx < 0 || target_idx >= monster_list.size()) {
+	if (target_idx >= monster_list.size()) {
 		return;
 	}
 	Monster* monster = monster_list[target_idx];
@@ -123,7 +123,7 @@ void BattleManager::DistributeReward()
 	items.clear();
 }
 
-int BattleManager::GetTotalExp() const
+unsigned int BattleManager::GetTotalExp() const
 {
 	return total_exp;
 }

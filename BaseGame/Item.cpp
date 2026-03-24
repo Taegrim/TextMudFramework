@@ -4,9 +4,14 @@
 #include <cassert>
 
 
-Item::Item(std::string_view n, std::string_view desc, int price, ItemType type)
-	: name(n), description(desc), price(price), type(type)
+Item::Item(std::string_view n, std::string_view desc, int price, ItemType type, int count, int max_stack)
+	: name(n), description(desc), price(price), type(type), stack_count(count), max_stack(max_stack)
 {
+}
+
+bool Item::IsEquipped() const
+{
+	return false;
 }
 
 std::string_view Item::GetName() const
@@ -29,18 +34,38 @@ ItemType Item::GetType() const
 	return type;
 }
 
+int Item::GetStackCount() const
+{
+	return stack_count;
+}
+
+int Item::GetMaxStack() const
+{
+	return max_stack;
+}
+
+void Item::SetStackCount(int amount)
+{
+	stack_count = amount;
+}
+
+void Item::AddStackCount(int amount)
+{
+	stack_count += amount;
+}
+
 
 
 // 장비
 Equipment::Equipment(std::string_view n, std::string_view desc,  int price, EquipmentSlot slot,  bool is_equipped)
-	: Item(n, desc, price, ItemType::Equipment), slot(slot), is_equipped(is_equipped)
+	: Item(n, desc, price, ItemType::Equipment, 1, 1), slot(slot), is_equipped(is_equipped)
 {
 }
 
-void Equipment::Use(Player* player)
+bool Equipment::Use(Player* player)
 {
 	if (!player) {
-		return;
+		return false;
 	}
 
 	if (IsEquipped()) {
@@ -49,6 +74,7 @@ void Equipment::Use(Player* player)
 	else {
 		player->Equip(this);
 	}
+	return true;
 }
 
 EquipmentSlot Equipment::GetSlot() const
@@ -79,18 +105,31 @@ void Equipment::SetBonusStat(const std::vector<std::pair<StatusType, int>>& stat
 
 
 // 소모품
-Consumable::Consumable(std::string_view n, std::string_view desc, int price, int amount)
-	: Item(n, desc, price, ItemType::Potion), amount(amount)
+Consumable::Consumable(std::string_view n, std::string_view desc, int price, int amount, int count)
+	: Item(n, desc, price, ItemType::Potion, count, MAX_STACK_COUNT), amount(amount)
 {
 }
 
-void Consumable::Use(Player* player)
+bool Consumable::Use(Player* player)
 {
 	if (!player) {
-		return;
+		return false;
+	}
+
+	if (stack_count <= 0) {
+		return false;
+	}
+
+	if (player->GetHp() >= player->GetStatus()[StatusType::MaxHp]) {
+		UIManager::GetInstance().AddMessage(GlobalUIType::Log, "체력이 이미 가득 차 있습니다.");
+		return false;
 	}
 
 	player->Heal(amount);
+	UIManager::GetInstance().AddMessage(GlobalUIType::Log,
+		"[회복] " + name + "을(를) 사용하여 체력을 " + std::to_string(amount) + " 회복했습니다.");
+	--stack_count;
+	return true;
 }
 
 int Consumable::GetAmount() const
@@ -98,15 +137,15 @@ int Consumable::GetAmount() const
 	return amount;
 }
 
-JunkItem::JunkItem(std::string_view n, std::string_view desc, int price)
-	: Item(n, desc, price, ItemType::Junk)
+JunkItem::JunkItem(std::string_view n, std::string_view desc, int price, int count)
+	: Item(n, desc, price, ItemType::Junk, count, MAX_STACK_COUNT)
 {
 }
 
-void JunkItem::Use(Player* player)
+bool JunkItem::Use(Player* player)
 {
 	UIManager::GetInstance().AddMessage(GlobalUIType::Log,
-		"[에러] 이 아이템은 사용할 수 없습니다. 상점에 판매하세요.");
+		"이 아이템은 사용할 수 없습니다. 상점에 판매하세요.");
 
-	assert(false && "잡템의 Use 함수가 호출되었습니다!");
+	return false;
 }
